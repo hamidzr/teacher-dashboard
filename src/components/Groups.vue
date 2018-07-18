@@ -28,7 +28,6 @@ export default {
         withCredentials: true,
       })
       this.$store.state.groups = groups;
-      console.log(groups);
       return groups;
     },
   }

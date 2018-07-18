@@ -4,14 +4,11 @@ export default  {
   data: function() {
     return {
       authenticator: new AuthHandler(this.$store.state.SERVER_ADDRESS),
-      // user: this.$store.state.user,
     }; // end of data
   },
 
   computed: {
-    user() {
-      return this.$store.state.user
-    }
+    user() { return this.$store.state.user }
   },
   methods: {
 
