@@ -14,7 +14,7 @@
 import authMixin from '@/mixins/auth'
 
 export default {
-  name: 'Header',
+  name: 'headerComp',
   props: {
   },
   mixins: [
