@@ -16,6 +16,13 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About
-    }
+    },
+    {
+      path: '/login',
+      beforeEnter() {
+        let destination = location.href
+        location.href = `https://login.netsblox.org?redirect=${destination}`
+      }
+    },
   ]
 })
