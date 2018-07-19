@@ -40,6 +40,15 @@ export default new Vuex.Store({
       return groups;
     },
 
+    async fetchGroup(context, groupId) {
+      const endpoint = context.state.SERVER_ADDRESS + '/api/groups/' + groupId
+      let { data: group } = await axios.get(endpoint, {
+        withCredentials: true,
+      })
+      context.commit('addGroup', group);
+      return group;
+    },
+
     async fetchMembers(context, groupId) { // gets group details
       if (!groupId || groupId.length !== 24) throw new Error('invalid group id', groupId);
       console.log('fetching members', groupId);
@@ -47,7 +56,7 @@ export default new Vuex.Store({
       let { data: members } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      context.commit('setGroupMembers', groupId, members);
+      if (context.state.groups.find(g => g._id === groupId)) context.commit('setGroupMembers', groupId, members);
       return members;
     },
 
