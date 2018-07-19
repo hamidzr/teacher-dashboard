@@ -3,6 +3,9 @@
     <p v-if="id">showing a group</p>
     <p v-if="!id">Creating a new group /new</p>
     <p>{{ group.name }}</p>
+    <ul>
+      <li v-for="user in group.members" :key="user.username">{{ user.username }}</li>
+    </ul>
     <GroupForm />
   </div>
 </template>
