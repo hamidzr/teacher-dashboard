@@ -2,6 +2,7 @@
   <div>
     <p v-if="id">showing a group</p>
     <p v-if="!id">Creating a new group /new</p>
+    <p>{{ group.name }}</p>
     <GroupForm />
   </div>
 </template>
@@ -15,22 +16,39 @@ export default {
   props: ['id'],
   data() {
     return {
-      groupName: '',
-      groupMembers: [] // username, email, password
     }
   }, // end of data
   components: {
     GroupForm
   },
+
+  computed: {
+    group() {
+      let group = this.findGroup() || {
+        name: '',
+      };
+      console.log('group', group);
+      return group;
+    },
+  },
+
   async created() {
-    if (this.hasGroup()) await this.fetchMembers(this.id);
+    if (this.hasGroup()) {
+      await this.fetchGroup(this.id);
+      await this.fetchMembers(this.id);
+    }
   },
   methods: {
-    ...mapActions(['addMember', 'fetchMembers']),
+    ...mapActions(['fetchGroup', 'addMember', 'fetchMembers']),
 
     hasGroup() {
       return !!this.id;
-    }
+    },
+
+    findGroup() {
+      let group = this.$store.state.groups.find(g => g._id === this.id);
+      return group;
+    },
   }
 }
 </script>
