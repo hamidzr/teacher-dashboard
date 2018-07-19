@@ -8,21 +8,29 @@
 
 <script>
 import GroupForm from '@/components/GroupForm.vue'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'groupView',
   props: ['id'],
   data() {
     return {
-      groupName: ''
+      groupName: '',
+      groupMembers: [] // username, email, password
     }
   }, // end of data
   components: {
     GroupForm
   },
-  created() {
+  async created() {
+    if (this.hasGroup()) await this.fetchMembers(this.id);
   },
   methods: {
+    ...mapActions(['addMember', 'fetchMembers']),
+
+    hasGroup() {
+      return !!this.id;
+    }
   }
 }
 </script>

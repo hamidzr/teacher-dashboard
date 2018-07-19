@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'groupForm',
@@ -21,15 +21,7 @@ export default {
   created() {
   },
   methods: {
-    async createGroup() {
-      let name = this.groupName;
-      console.log('creating group', name);
-      const endpoint = this.$store.state.SERVER_ADDRESS + '/api/groups'
-      let response = await axios.post(endpoint, {name: name}, {
-        withCredentials: true
-      })
-      console.log(response);
-    },
+    ...mapActions(['createGroup']),
   }
 }
 </script>
