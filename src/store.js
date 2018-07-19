@@ -4,6 +4,10 @@ import axios from 'axios'
 
 Vue.use(Vuex)
 
+function findGroup(state, groupId) {
+  return state.groups.find(g => g._id === groupId)
+}
+
 export default new Vuex.Store({
   state: {
     SERVER_ADDRESS: 'http://localhost:8080',
@@ -22,11 +26,11 @@ export default new Vuex.Store({
 
     // TODO rename member to user?
     setGroupMembers(state, groupId, members) {
-      state.groups.find(g => g._id === groupId).members = members;
+      findGroup(state, groupId).members = members;
     },
 
     addGroupMember(state, groupId, member) {
-      state.groups.find(g => g._id === groupId).members.push(member);
+      findGroup(state, groupId).members.push(member);
     },
   },
 
@@ -56,7 +60,7 @@ export default new Vuex.Store({
       let { data: members } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      if (context.state.groups.find(g => g._id === groupId)) context.commit('setGroupMembers', groupId, members);
+      if (findGroup(context.state, groupId)) context.commit('setGroupMembers', groupId, members);
       return members;
     },
 
