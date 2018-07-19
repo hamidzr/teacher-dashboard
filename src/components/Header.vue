@@ -2,7 +2,7 @@
   <header>
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/group">Group</router-link> |
+      <router-link to="/groups/new">Group</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link v-if="!user" to="/login">Login</router-link>
       <a href="#" v-if="!!user" @click="logoutWithConfirm">Logout ({{ user.username }})</a>
