@@ -12,12 +12,11 @@
         </router-link>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'groups',
@@ -32,14 +31,7 @@ export default {
     groups() {return this.$store.state.groups}
   },
   methods: {
-    async fetchGroups() {
-      const endpoint = this.$store.state.SERVER_ADDRESS + '/api/groups'
-      let { data: groups } = await axios.get(endpoint, {
-        withCredentials: true,
-      })
-      this.$store.state.groups = groups;
-      return groups;
-    },
+  ...mapActions(['fetchGroups'])
   }
 }
 </script>
