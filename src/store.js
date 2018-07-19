@@ -24,13 +24,13 @@ export default new Vuex.Store({
       state.groups = groups;
     },
 
-    // TODO rename member to user?
-    setGroupMembers(state, groupId, members) {
-      findGroup(state, groupId).members = members;
+    // TODO rename user to user?
+    setGroupUsers(state, groupId, users) {
+      findGroup(state, groupId).users = users;
     },
 
-    addGroupMember(state, groupId, member) {
-      findGroup(state, groupId).members.push(member);
+    addGroupUser(state, groupId, user) {
+      findGroup(state, groupId).users.push(user);
     },
   },
 
@@ -53,25 +53,25 @@ export default new Vuex.Store({
       return group;
     },
 
-    async fetchMembers(context, groupId) { // gets group details
+    async fetchUsers(context, groupId) { // gets group details
       if (!groupId || groupId.length !== 24) throw new Error('invalid group id', groupId);
-      console.log('fetching members', groupId);
+      console.log('fetching users', groupId);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${groupId}/members`
-      let { data: members } = await axios.get(endpoint, {
+      let { data: users } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      if (findGroup(context.state, groupId)) context.commit('setGroupMembers', groupId, members);
-      return members;
+      if (findGroup(context.state, groupId)) context.commit('setGroupUsers', groupId, users);
+      return users;
     },
 
-    async addMember(context, groupId, user) {
+    async createUser(context, groupId, user) {
       if (!user.username || user.email || user.password) throw new Error('missing user data', user);
-      console.log(`adding member ${user} to ${groupId}`);
+      console.log(`adding user ${user} to ${groupId}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${groupId}/members`
       let response = await axios.post(endpoint, user, {
         withCredentials: true
       })
-      context.commit('addGroupMember', groupId, user);
+      context.commit('addGroupUser', groupId, user);
       return response.data;
     },
 

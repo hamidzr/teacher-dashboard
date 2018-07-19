@@ -7,7 +7,7 @@
             <span class="card-title">
               {{ group.name }}
             </span>
-            <p>group description or members here</p>
+            <p>group description or users here</p>
           </div>
         </router-link>
       </div>

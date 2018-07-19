@@ -4,7 +4,7 @@
     <p v-if="!id">Creating a new group /new</p>
     <p>{{ group.name }}</p>
     <ul>
-      <li v-for="user in group.members" :key="user.username">{{ user.username }}</li>
+      <li v-for="user in group.users" :key="user.username">{{ user.username }}</li>
     </ul>
     <GroupForm />
   </div>
@@ -41,7 +41,7 @@ export default {
       }
   },
   methods: {
-    ...mapActions(['fetchGroup', 'addMember', 'fetchMembers']),
+    ...mapActions(['fetchGroup', 'createUser', 'fetchUsers']),
 
     hasGroup() {
       return !!this.id;
@@ -49,7 +49,7 @@ export default {
 
     async loadData() {
       if (!this.findGroup()) await this.fetchGroup(this.id);
-      await this.fetchMembers(this.id);
+      await this.fetchUsers(this.id);
     },
 
     findGroup() {
