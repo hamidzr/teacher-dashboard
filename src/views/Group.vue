@@ -33,16 +33,20 @@ export default {
   },
 
   async created() {
-    if (this.hasGroup()) {
-      await this.fetchGroup(this.id);
-      await this.fetchMembers(this.id);
-    }
+      if (this.hasGroup()) {
+        this.loadData();
+      }
   },
   methods: {
     ...mapActions(['fetchGroup', 'addMember', 'fetchMembers']),
 
     hasGroup() {
       return !!this.id;
+    },
+
+    async loadData() {
+      if (!this.findGroup()) await this.fetchGroup(this.id);
+      await this.fetchMembers(this.id);
     },
 
     findGroup() {
