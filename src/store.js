@@ -65,7 +65,7 @@ export default new Vuex.Store({
     },
 
     async addMember(context, groupId, user) {
-      // TODO validate user
+      if (!user.username || user.email || user.password) throw new Error('missing user data', user);
       console.log(`adding member ${user} to ${groupId}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${groupId}/members`
       let response = await axios.post(endpoint, user, {
