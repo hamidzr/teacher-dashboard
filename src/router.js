@@ -14,9 +14,15 @@ export default new Router({
       component: Home
     },
     {
-      path: '/group',
-      name: 'group',
+      path: '/groups/new',
+      name: 'groupNew',
       component: Group
+    },
+    { // used for viewing and editing the group
+      path: '/groups/:id',
+      name: 'group',
+      component: Group,
+      props: true
     },
     {
       path: '/about',
