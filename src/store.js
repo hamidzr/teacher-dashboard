@@ -24,13 +24,16 @@ export default new Vuex.Store({
       state.groups = groups;
     },
 
-    // TODO rename user to user?
-    setGroupUsers(state, groupId, users) {
+    setGroupUsers(state, payload) {
+      const { groupId, users } = payload;
       findGroup(state, groupId).users = users;
     },
 
-    addGroupUser(state, groupId, user) {
-      findGroup(state, groupId).users.push(user);
+    addGroupUser(state, payload) {
+      const { groupId, user } = payload;
+      let group = findGroup(state, groupId);
+      if (!group.users) group.users = [];
+      group.users.push(user);
     },
   },
 
@@ -60,18 +63,20 @@ export default new Vuex.Store({
       let { data: users } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      if (findGroup(context.state, groupId)) context.commit('setGroupUsers', groupId, users);
+      if (findGroup(context.state, groupId)) context.commit('setGroupUsers', {groupId, users});
       return users;
     },
 
-    async createUser(context, groupId, user) {
-      if (!user.username || user.email || user.password) throw new Error('missing user data', user);
+    async createUser(context, payload) {
+      const { user, groupId } = payload;
       console.log(`adding user ${user} to ${groupId}`);
+      if (!user || !user.username || !user.email || !user.password) throw new Error(`missing user data, ${user}}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${groupId}/members`
       let response = await axios.post(endpoint, user, {
         withCredentials: true
       })
-      context.commit('addGroupUser', groupId, user);
+      console.log(context.state.groups);
+      context.commit('addGroupUser', {groupId, user});
       return response.data;
     },
 
