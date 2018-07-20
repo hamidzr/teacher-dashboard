@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Group from './views/Group.vue'
+import GroupsPage from './views/GroupsPage.vue'
 import About from './views/About.vue'
 
 Vue.use(Router)
@@ -12,6 +13,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/groups',
+      name: 'groupsPage',
+      component: GroupsPage
     },
     {
       path: '/groups/new',

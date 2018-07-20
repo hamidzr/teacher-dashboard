@@ -1,15 +1,16 @@
 <template>
   <div class="home">
-    <img src="../assets/logo.png">
-    <p>main page content</p>
+    <Groups />
   </div>
 </template>
 
 <script>
+import Groups from '@/components/Groups.vue'
 
 export default {
-  name: 'home',
+  name: 'groupsPage',
   components: {
+    Groups
   }
 }
 </script>
