@@ -8,12 +8,13 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import groupMixin from '@/mixins/group'
 
 
 export default {
   name: 'groupPage',
   props: ['id'],
+  mixins: [groupMixin],
   data() {
     return {
       aUser: {
@@ -21,36 +22,19 @@ export default {
         email: '',
         password: '',
       },
-      group: {
-        name: '',
-        users: []
-      },
     }
   }, // end of data
   components: {
   },
 
   computed: {
-    ...mapGetters(['getGroupById']),
-    // QUESTION should there be an async group computed property which loads the data?!
   },
 
   created() {
-    this.loadData();
+    this.loadGroupData();
   },
 
   methods: {
-    ...mapActions(['fetchGroup', 'createUser', 'fetchUsers']),
-
-    // loads group data. assumes that there is such data
-    async loadData() {
-      let group = this.getGroupById(this.id);
-      group = group ? group : await this.fetchGroup(this.id);
-      group.users = group.users ? group.users : await this.fetchUsers(this.id);
-      this.group = group;
-      return group;
-    },
-
   }
 }
 </script>
