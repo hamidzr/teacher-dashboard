@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <router-link to="/groups/new">New Group</router-link>
     <Groups />
   </div>
 </template>
