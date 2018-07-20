@@ -2,7 +2,7 @@
   <div>
     <form>
       <label>Group name: </label>
-      <input type="text" v-model="groupName"/>
+      <input type="text" v-model="group.name"/>
       <button @click.prevent="createGroup">Create</button>
     </form>
   </div>
@@ -12,7 +12,7 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'groupForm',
+  props: ['group'],
   data() {
     return {
       groupName: ''

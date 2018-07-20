@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>gp change page</p>
+    <GroupForm :group="group" />
   </div>
 </template>
 
