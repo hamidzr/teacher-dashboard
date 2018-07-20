@@ -44,6 +44,11 @@ export default new Vuex.Store({
         return state.groups.find(g => g._id === groupId)
       }
     },
+    getUserByUsername(state, getters) {
+      return (groupId, username) => {
+        return getters.getGroupById(groupId).users.find(u => u.username === username);
+      }
+    }
   },
 
   actions: {
