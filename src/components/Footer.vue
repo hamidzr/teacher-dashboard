@@ -13,4 +13,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+footer {
+  text-align: center;
+}
 </style>

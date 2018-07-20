@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>{{ group.name }}</p>
+    <router-link :to="{name: 'groupEdit', params: {id: group._id}}"><i class="material-icons">edit</i></router-link>
     <ul>
       <li v-for="user in group.users" :key="user.username">{{ user.username }}</li>
     </ul>
