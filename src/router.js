@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Group from './views/Group.vue'
+import GroupPage from './views/GroupPage.vue'
 import GroupsPage from './views/GroupsPage.vue'
 import GroupChangePage from './views/GroupChangePage.vue'
 import About from './views/About.vue'
@@ -17,7 +17,7 @@ export default new Router({
     },
     {
       path: '/groups',
-      name: 'groupsPage',
+      name: 'groups',
       component: GroupsPage
     },
     {
@@ -27,14 +27,14 @@ export default new Router({
     },
     {
       path: '/groups/:id/edit',
-      name: 'groupNew',
+      name: 'groupEdit',
       component: GroupChangePage,
       props: true
     },
     { // used for viewing
       path: '/groups/:id',
       name: 'group',
-      component: Group,
+      component: GroupPage,
       props: true
     },
     {
