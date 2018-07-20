@@ -5,6 +5,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 function findGroup(state, groupId) {
+  // there is no access to getters in mutations
   return state.groups.find(g => g._id === groupId)
 }
 
@@ -37,6 +38,14 @@ export default new Vuex.Store({
     },
   },
 
+  getters: {
+    getGroupById(state) {
+      return groupId => {
+        return state.groups.find(g => g._id === groupId)
+      }
+    },
+  },
+
   actions: {
     async fetchGroups(context) {
       const endpoint = context.state.SERVER_ADDRESS + '/api/groups'
@@ -63,7 +72,7 @@ export default new Vuex.Store({
       let { data: users } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      if (findGroup(context.state, groupId)) context.commit('setGroupUsers', {groupId, users});
+      if (context.getters.getGroupById(groupId)) context.commit('setGroupUsers', {groupId, users});
       return users;
     },
 
