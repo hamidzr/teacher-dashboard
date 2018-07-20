@@ -2,20 +2,22 @@
   <div>
     <p>{{ group.name }}</p>
     <router-link :to="{name: 'groupEdit', params: {id: group._id}}"><i class="material-icons">edit</i></router-link>
-    <ul>
-      <li v-for="user in group.users" :key="user.username">{{ user.username }}</li>
-    </ul>
+    <Users :users="group.users" />
   </div>
 </template>
 
 <script>
 import groupMixin from '@/mixins/group'
+import Users from '@/components/Users.vue'
 
 
 export default {
   name: 'groupPage',
   props: ['id'],
   mixins: [groupMixin],
+  components: {
+    Users,
+  },
   data() {
     return {
       aUser: {
@@ -25,8 +27,6 @@ export default {
       },
     }
   }, // end of data
-  components: {
-  },
 
   computed: {
   },
