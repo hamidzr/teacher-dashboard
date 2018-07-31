@@ -2,7 +2,7 @@
   <div>
     <p>{{ group.name }}</p>
     <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link>
-    <Users :users="group.users" />
+    <Users :groupId="id" :users="group.users" />
   </div>
 </template>
 
