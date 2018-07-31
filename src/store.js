@@ -9,6 +9,9 @@ function findGroup(state, groupId) {
   return state.groups.find(g => g._id === groupId)
 }
 
+
+const userChangeableAttrs = ['username', 'email'];
+
 export default new Vuex.Store({
   state: {
     SERVER_ADDRESS: 'http://localhost:8080',
@@ -30,6 +33,19 @@ export default new Vuex.Store({
       findGroup(state, groupId).users = users;
     },
 
+    // update a single user
+    // payload user should have a groupId
+    patchGroupUser(state, user) {
+      const { groupId, username } = user;
+      let groupUsers = findGroup(state, groupId).users;
+      let targetUser = groupUsers.find(u => u.username = username);
+      userChangeableAttrs.forEach(att => {
+        if (user[att]) {
+          targetUser[att] = user[att];
+        }
+      })
+    },
+
     addGroupUser(state, payload) {
       const { groupId, user } = payload;
       let group = findGroup(state, groupId);
@@ -44,9 +60,16 @@ export default new Vuex.Store({
         return state.groups.find(g => g._id === groupId)
       }
     },
+
     getUserByUsername(state, getters) {
       return (groupId, username) => {
         return getters.getGroupById(groupId).users.find(u => u.username === username);
+      }
+    },
+
+    getUserById(state, getters) {
+      return (groupId, userId) => {
+        return getters.getGroupById(groupId).users.find(u => u._id === userId);
       }
     }
   },
@@ -91,6 +114,17 @@ export default new Vuex.Store({
       })
       console.log(context.state.groups);
       context.commit('addGroupUser', {groupId, user});
+      return response.data;
+    },
+
+    async updateUser(context, user) {
+      console.log(`updating user ${user}`);
+      if (!user || !user.username || !user.email) throw new Error(`missing user data, ${user}}`);
+      const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members/${user._id}`;
+      let response = await axios.put(endpoint, user, {
+        withCredentials: true
+      })
+      context.commit('patchGroupUser', user);
       return response.data;
     },
 
