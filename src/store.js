@@ -54,6 +54,12 @@ export default new Vuex.Store({
       })
     },
 
+    deleteGroupUser(state, user) {
+      let group = findGroup(state, user.groupId);
+      let targetIndex = group.findIndex(u => u._id = user._id);
+      group.splice(targetIndex, 1);
+    },
+
     addGroupUser(state, payload) {
       const { groupId, user } = payload;
       let group = findGroup(state, groupId);
@@ -133,6 +139,17 @@ export default new Vuex.Store({
         withCredentials: true
       })
       context.commit('patchGroupUser', user);
+      return response.data;
+    },
+
+    async deleteUser(context, user) {
+      console.log(`deleting user ${user}`);
+      if (!user || !user.username || !user.email) throw new Error(`missing user data, ${user}}`);
+      const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members/${user._id}`;
+      let response = await axios.delete(endpoint, {
+        withCredentials: true
+      })
+      context.commit('deleteGroupUser', user);
       return response.data;
     },
 
