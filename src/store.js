@@ -10,7 +10,8 @@ function findGroup(state, groupId) {
 }
 
 
-const userChangeableAttrs = ['username', 'email'];
+const userChangeableAttrs = ['username', 'email'],
+  groupChangeableAttrs = ['name'];
 
 export default new Vuex.Store({
   state: {
@@ -22,6 +23,13 @@ export default new Vuex.Store({
   mutations: {
     addGroup(state, group) {
       state.groups.push(group);
+    },
+
+    patchGroup(state, group) {
+      let targetGroup = findGroup(state, group._id);
+      groupChangeableAttrs.forEach(attr => {
+        if (group[attr] !== undefined) targetGroup[attr] = group[attr];
+      })
     },
 
     setGroups(state, groups) {
@@ -40,7 +48,7 @@ export default new Vuex.Store({
       let groupUsers = findGroup(state, groupId).users;
       let targetUser = groupUsers.find(u => u.username = username);
       userChangeableAttrs.forEach(att => {
-        if (user[att]) {
+        if (user[att] !== undefined) {
           targetUser[att] = user[att];
         }
       })
@@ -121,10 +129,21 @@ export default new Vuex.Store({
       console.log(`updating user ${user}`);
       if (!user || !user.username || !user.email) throw new Error(`missing user data, ${user}}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members/${user._id}`;
-      let response = await axios.put(endpoint, user, {
+      let response = await axios.patch(endpoint, user, {
         withCredentials: true
       })
       context.commit('patchGroupUser', user);
+      return response.data;
+    },
+
+    async updateGroup(context, group) {
+      console.log(`updating group ${group}`);
+      if (!group || !group.name) throw new Error(`missing group data, ${group}}`);
+      const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${group._id}`;
+      let response = await axios.patch(endpoint, group, {
+        withCredentials: true
+      })
+      context.commit('patchGroup', group);
       return response.data;
     },
 
