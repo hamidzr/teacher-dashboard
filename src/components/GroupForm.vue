@@ -3,7 +3,8 @@
     <form>
       <label>Group name: </label>
       <input type="text" v-model="group.name"/>
-      <button @click.prevent="createGroup">Create</button>
+      <button v-if="isEditing" @click.prevent="updateGroup(group)">Update</button>
+      <button v-else @click.prevent="createGroup(group.name)">Create</button>
     </form>
   </div>
 </template>
@@ -15,13 +16,17 @@ export default {
   props: ['group'],
   data() {
     return {
-      groupName: ''
     }
   }, // end of data
+  computed: {
+    isEditing() {
+      return this.group._id;
+    }
+  },
   created() {
   },
   methods: {
-    ...mapActions(['createGroup']),
+    ...mapActions(['createGroup', 'updateGroup']),
   }
 }
 </script>
