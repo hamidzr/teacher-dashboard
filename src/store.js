@@ -56,8 +56,8 @@ export default new Vuex.Store({
 
     deleteGroupUser(state, user) {
       let group = findGroup(state, user.groupId);
-      let targetIndex = group.findIndex(u => u._id = user._id);
-      group.splice(targetIndex, 1);
+      let targetIndex = group.users.findIndex(u => u._id = user._id);
+      group.users.splice(targetIndex, 1);
     },
 
     addGroupUser(state, payload) {
