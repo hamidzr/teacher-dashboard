@@ -1,6 +1,6 @@
 <template>
   <footer>
-    footer content
+    NetsBlox
   </footer>
 </template>
 
@@ -12,8 +12,11 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 footer {
+  margin-top: 1rem;
+  padding: 0.5rem;
   text-align: center;
+  background-color: #eee;
 }
 </style>

@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p>{{ group.name }}</p>
-    <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link>
+    <h3>{{ group.name }}
+      <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link>
+    </h3>
+    <h5>Members: +</h5>
     <Users :groupId="id" :users="group.users" />
   </div>
 </template>

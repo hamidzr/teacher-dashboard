@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img src="../assets/logo.png">
-    <p>main page content</p>
+    <p>Welcome to NetsBlox teacher dashboard.</p>
   </div>
 </template>
 
@@ -13,3 +13,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+img {
+  max-width: 10vw;
+  max-height: 10vh;
+}
+</style>

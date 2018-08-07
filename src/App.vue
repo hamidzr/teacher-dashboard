@@ -1,7 +1,9 @@
 <template>
-  <div id="app" class="container">
+  <div id="app">
     <Header />
-    <router-view/>
+      <div class="container">
+        <router-view/>
+      </div>
     <Footer />
   </div>
 </template>
@@ -21,11 +23,18 @@ export default {
 </script>
 
 <style lang="scss">
+$color-black: black;
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: white;
+}
+
+body {
+  background-color: $color-black;
 }
 </style>

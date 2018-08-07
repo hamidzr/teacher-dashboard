@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>gp change page</p>
+    <h3>Edit {{ group.name }}</h3>
     <Users :groupId="id" :users="group.users" />
     <GroupForm :group="group" />
     <p>add a new user</p>

@@ -32,9 +32,10 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 header {
   text-align: center;
+  margin-bottom: 1rem;
 }
 
 #nav { /* should be using nav */

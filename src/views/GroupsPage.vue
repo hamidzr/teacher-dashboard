@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <router-link to="/groups/new">New Group</router-link>
+    <h2>Your Groups
+      <router-link to="/groups/new">+</router-link>
+    </h2>
     <Groups />
   </div>
 </template>
