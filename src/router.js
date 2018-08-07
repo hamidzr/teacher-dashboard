@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 import GroupPage from './views/GroupPage.vue'
 import GroupsPage from './views/GroupsPage.vue'
 import GroupChangePage from './views/GroupChangePage.vue'
-import About from './views/About.vue'
+import Help from './views/Help.vue'
 
 Vue.use(Router)
 
@@ -38,9 +38,9 @@ export default new Router({
       props: true
     },
     {
-      path: '/about',
-      name: 'about',
-      component: About
+      path: '/help',
+      name: 'help',
+      component: Help
     },
     {
       path: '/login',

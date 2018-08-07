@@ -3,11 +3,10 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/groups">Groups</router-link> |
-      <router-link to="/about">About</router-link> |
+      <router-link to="/help">Help</router-link> |
       <router-link v-if="!user" to="/login">Login</router-link>
       <a href="#" v-if="!!user" @click="logoutWithConfirm">Logout ({{ user.username }})</a>
     </div>
-    header content
   </header>
 </template>
 
