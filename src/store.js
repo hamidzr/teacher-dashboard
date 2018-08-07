@@ -36,6 +36,13 @@ export default new Vuex.Store({
       state.groups = groups;
     },
 
+    updateGroup(state, group) {
+      let targetGroup = findGroup(state, group._id);
+      console.assert(targetGroup, 'group is missing');
+      targetGroup.name = group.name;
+      targetGroup.users = group.users || [];
+    },
+
     setGroupUsers(state, payload) {
       const { groupId, users } = payload;
       findGroup(state, groupId).users = users;
@@ -89,6 +96,7 @@ export default new Vuex.Store({
   },
 
   actions: {
+    // WARN probably shouldn't use the return values from actions as they are not a reference  to the store
     async fetchGroups(context) {
       const endpoint = context.state.SERVER_ADDRESS + '/api/groups'
       let { data: groups } = await axios.get(endpoint, {
@@ -103,7 +111,12 @@ export default new Vuex.Store({
       let { data: group } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      context.commit('addGroup', group);
+      let existingGroup = findGroup(context.state, groupId);
+      if (existingGroup) {
+        context.commit('updateGroup', group);
+      } else {
+        context.commit('addGroup', group);
+      }
       return group;
     },
 
@@ -114,7 +127,9 @@ export default new Vuex.Store({
       let { data: users } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      if (context.getters.getGroupById(groupId)) context.commit('setGroupUsers', {groupId, users});
+      let targetGroup = context.getters.getGroupById(groupId);
+      console.assert(targetGroup.name, 'invalid group');
+      context.commit('setGroupUsers', {groupId, users});
       return users;
     },
 
@@ -126,7 +141,6 @@ export default new Vuex.Store({
       let response = await axios.post(endpoint, user, {
         withCredentials: true
       })
-      console.log(context.state.groups);
       context.commit('addGroupUser', {groupId, user});
       return response.data;
     },
