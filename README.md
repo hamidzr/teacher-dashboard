@@ -1,10 +1,9 @@
 # Teacher Dashboard
 
 ## TODO
-- group two way binding with users being edited doesn' work
-- add user creation from (all in one?)
-- improve group creation/edit form
+- improve user/group creation UI
 - components should use props to receive data or maybe store?
+- fix page titles
 - survey available admin dashboard themes
 
 ## Installation
