@@ -133,15 +133,14 @@ export default new Vuex.Store({
       return users;
     },
 
-    async createUser(context, payload) {
-      const { user, groupId } = payload;
-      console.log(`adding user ${user} to ${groupId}`);
-      if (!user || !user.username || !user.email || !user.password) throw new Error(`missing user data, ${user}}`);
-      const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${groupId}/members`
+    async createUser(context, user) {
+      console.log(`creating user ${user.username}`);
+      if (!user || !user.username || !user.groupId || !user.email || !user.password) throw new Error(`missing user data, ${user.username}}`);
+      const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members`
       let response = await axios.post(endpoint, user, {
         withCredentials: true
       })
-      context.commit('addGroupUser', {groupId, user});
+      context.commit('addGroupUser', {groupId: user.groupId, user});
       return response.data;
     },
 
