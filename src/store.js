@@ -92,7 +92,14 @@ export default new Vuex.Store({
       return (groupId, userId) => {
         return getters.getGroupById(groupId).users.find(u => u._id === userId);
       }
-    }
+    },
+
+    getUsers(state, getters) {
+      return groupId => {
+        console.log('getting users for', groupId);
+        return getters.getGroupById(groupId).users;
+      }
+    },
   },
 
   actions: {
