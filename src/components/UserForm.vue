@@ -8,7 +8,7 @@
       <input type="text" v-model="user.email"/>
       <label>password</label>
       <input type="text" v-model="user.password"/>
-      <button @click.prevent="createUser({groupId, user})">Save</button>
+      <button @click.prevent="saveNewUser">Save</button>
     </form>
   </div>
 </template>
@@ -40,6 +40,11 @@ export default {
   },
   methods: {
     ...mapActions(['createUser']),
+
+    async saveNewUser() {
+      this.user.groupId = this.groupId;
+      await this.createUser(this.user);
+    }
   }
 }
 </script>
