@@ -37,7 +37,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['deleteUser', 'updateUser']),
+    ...mapActions(['deleteUser', 'updateUser', 'createUser']),
     async deleteUserConfirm() {
       if (confirm(`are you sure you want to delete user ${this.user.username}?`)) {
         return await this.deleteUser(this.user);
