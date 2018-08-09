@@ -37,4 +37,13 @@ $color-black: black;
 body {
   background-color: $color-black;
 }
+
+.editable {
+  font-style: italic;
+  color: black;
+  text-shadow: 0px 0px 20px rgb(251, 255, 0);
+  /* font-size: 1.2rem; */
+  /* text-decoration: underline; */
+  /* text-decoration-style: dashed; */
+}
 </style>
