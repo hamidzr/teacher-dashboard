@@ -13,6 +13,7 @@
       <span class="password" :contenteditable="editing">{{ user.password }}</span>
     </div>
     <a href="#" v-if="editing" @click.prevent="save"><i class="material-icons">check</i></a>
+    <a href="#" v-if="editing" @click.prevent="cancelEditing"><i class="material-icons">close</i></a>
     <a href="#" v-else @click.prevent="toggleEditing"><i class="material-icons">edit</i></a>
     <a href="#" @click.prevent="deleteUserConfirm()"><i class="material-icons">delete</i></a>
   </div>
@@ -48,17 +49,32 @@ export default {
       this.editing = !this.editing;
     },
 
+    cancelEditing() {
+      this.resetFields();
+      this.toggleEditing();
+    },
+
+    resetFields() {
+      this.setValues({
+        username: this.user.username,
+        email: this.user.email,
+      });
+    },
+
     async save() {
       this.toggleEditing();
-      let userValues = {...this.user, ...this.readValues()};
       try {
-        if (this.isNewUser()) {
+        if (this.isNewUser) {
+          let userValues = {...this.user, ...this.readValues(['username', 'email', 'password'])};
           await this.createUser(userValues);
         } else {
+          let userValues = {...this.user, ...this.readValues(['username', 'email'])};
           await this.updateUser(userValues);
         }
       } catch (e) {
         // revert html values back?
+        this.resetFields();
+        console.error(e);
         alert('failed to save user', e);
       }
     },
@@ -67,12 +83,18 @@ export default {
       return '_' + this.user._id;
     },
 
-    readValues() {
-      let username = document.querySelector(`#${this.htmlId()} .username`).innerText;
-      let email = document.querySelector(`#${this.htmlId()} .email`).innerText;
-      this.user.username = username;
-      // this.user.email = email;
-      return {username, email};
+    setValues(keyVals) {
+      for (let key in keyVals) {
+        document.querySelector(`#${this.htmlId()} .${key}`).innerText = keyVals[key];
+      }
+    },
+
+    readValues(keys) {
+      let keyVals = {};
+      keys.forEach(key => {
+        keyVals[key] = document.querySelector(`#${this.htmlId()} .${key}`).innerText
+      });
+      return keyVals;
     }
   }
 }
