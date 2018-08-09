@@ -5,6 +5,7 @@ import GroupPage from './views/GroupPage.vue'
 import GroupsPage from './views/GroupsPage.vue'
 import GroupChangePage from './views/GroupChangePage.vue'
 import Help from './views/Help.vue'
+import store from './store'
 
 Vue.use(Router)
 
@@ -46,7 +47,7 @@ export default new Router({
       path: '/login',
       beforeEnter() {
         let destination = location.href
-        location.href = `https://login.netsblox.org?redirect=${destination}`
+        location.href = `https://login.netsblox.org?url=${store.state.SERVER_ADDRESS}&redirect=${destination}`
       }
     },
   ]
