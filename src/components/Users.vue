@@ -6,8 +6,6 @@
         <a href="#" v-show="isAddingUser" @click.prevent="addUser"><i class="material-icons" title="Save user">check</i></a>
         <a href="#" v-show="isAddingUser" @click.prevent="toggleAddingUser"><i class="material-icons" title="Cancel">close</i></a>
       </h5>
-      <!-- <button v-if="!isAddingUser" @click="toggleAddingUser">Create User</button> -->
-      <!-- <button v-else @click="addUser">Save User</button> -->
     </div>
     <div v-if="isAddingUser">
       <div class="row">
@@ -35,7 +33,7 @@
       </div>
 
     </div>
-    <table class="centered stripped highlight responsive-table">
+    <table v-show="hasUsers" class="centered stripped highlight responsive-table">
       <thead>
         <tr>
           <th>Username</th>
@@ -72,6 +70,12 @@ export default {
   },
   components: {
     UserTableRow,
+  },
+
+  computed: {
+    hasUsers() {
+      return this.users.length !== 0;
+    }
   },
 
   methods: {
