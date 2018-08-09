@@ -1,7 +1,13 @@
 <template>
-  <div>
-    <h3>{{ group.name }}
-      <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link>
+  <div :id="elementId()">
+    <h3>
+      <span class="name" :class="{ editable: editing }" contenteditable="editing">
+        {{ group.name }}
+      </span>
+      <a href="#" v-if="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
+      <a href="#" v-if="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a>
+      <a href="#" v-else @click.prevent="toggleEditing"><i class="material-icons" title="Edit">edit</i></a>
+      <!-- <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link> -->
     </h3>
     <h5>Members: +</h5>
     <Users :groupId="id" :users="group.users" />
@@ -10,6 +16,7 @@
 
 <script>
 import groupMixin from '@/mixins/group'
+import { mapActions } from 'vuex'
 import Users from '@/components/Users.vue'
 
 
@@ -22,6 +29,7 @@ export default {
   },
   data() {
     return {
+      editing: false,
       aUser: {
         username: '',
         email: '',
@@ -38,6 +46,49 @@ export default {
   },
 
   methods: {
+    ...mapActions(['updateGroup', ]),
+
+    // TODO refactor editable field to its own component
+    async save() {
+      this.toggleEditing();
+      let group = {...this.group, ...this.readValues(['name'])};
+      await this.updateGroup(group);
+      this.group.name = group.name; // try to keep the bindings?
+    },
+
+    cancelEditing() {
+      this.resetFields();
+      this.toggleEditing();
+    },
+
+    resetFields() {
+      this.setValues({
+        name: this.group.name
+      })
+    },
+
+    toggleEditing() {
+      this.editing = !this.editing;
+    },
+
+    setValues(keyVals) {
+      for (let key in keyVals) {
+        document.querySelector(`#${this.elementId()} .${key}`).innerText = keyVals[key];
+      }
+    },
+
+    readValues(keys) {
+      let keyVals = {};
+      keys.forEach(key => {
+        keyVals[key] = document.querySelector(`#${this.elementId()} .${key}`).innerText
+      });
+      return keyVals;
+    },
+
+    elementId() {
+      return '_' + this.group._id;
+    },
+
   }
 }
 </script>

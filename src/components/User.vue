@@ -1,5 +1,5 @@
 <template>
-  <div class="inline-inputs" :id="htmlId()">
+  <div class="inline-inputs" :id="elementId()">
     <div>
       email:
       <span class="email" :contenteditable="editing">{{ user.email }}</span>
@@ -79,20 +79,20 @@ export default {
       }
     },
 
-    htmlId() {
+    elementId() {
       return '_' + this.user._id;
     },
 
     setValues(keyVals) {
       for (let key in keyVals) {
-        document.querySelector(`#${this.htmlId()} .${key}`).innerText = keyVals[key];
+        document.querySelector(`#${this.elementId()} .${key}`).innerText = keyVals[key];
       }
     },
 
     readValues(keys) {
       let keyVals = {};
       keys.forEach(key => {
-        keyVals[key] = document.querySelector(`#${this.htmlId()} .${key}`).innerText
+        keyVals[key] = document.querySelector(`#${this.elementId()} .${key}`).innerText
       });
       return keyVals;
     }

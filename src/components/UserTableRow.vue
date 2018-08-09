@@ -1,5 +1,5 @@
 <template>
-  <tr :id="htmlId()">
+  <tr :id="elementId()">
     <td class="username" :class="{ editable: editing }" :contenteditable="editing">{{ user.username }}</td>
     <td class="email" :class="{ editable: editing }" :contenteditable="editing">{{ user.email }}</td>
     <td>
