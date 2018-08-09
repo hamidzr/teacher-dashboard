@@ -9,7 +9,6 @@
       <a href="#" v-else @click.prevent="toggleEditing"><i class="material-icons" title="Edit">edit</i></a>
       <!-- <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link> -->
     </h3>
-    <h5>Members: +</h5>
     <Users :groupId="id" :users="group.users" />
   </div>
 </template>

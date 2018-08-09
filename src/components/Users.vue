@@ -2,8 +2,12 @@
   <div>
     <div>
       <!-- search bar and user creation bar -->
-      <button v-if="!isAddingUser" @click="toggleAddingUser">Create User</button>
-      <button v-else @click="addUser">Save User</button>
+      <h5>Members: <a href="#" v-show="!isAddingUser" @click.prevent="toggleAddingUser" title="Create a new member">+</a>
+        <a href="#" v-show="isAddingUser" @click.prevent="addUser"><i class="material-icons" title="Save user">check</i></a>
+        <a href="#" v-show="isAddingUser" @click.prevent="toggleAddingUser"><i class="material-icons" title="Cancel">close</i></a>
+      </h5>
+      <!-- <button v-if="!isAddingUser" @click="toggleAddingUser">Create User</button> -->
+      <!-- <button v-else @click="addUser">Save User</button> -->
     </div>
     <div v-if="isAddingUser">
       <div class="row">
@@ -72,6 +76,7 @@ export default {
 
   methods: {
     ...mapActions(['createUser']),
+
     toggleAddingUser() {
       this.isAddingUser = !this.isAddingUser;
       this.resetNewUser();
@@ -88,8 +93,13 @@ export default {
 
     async addUser() {
       this.isAddingUser = false;
-      await this.createUser(this.newUser);
-      this.newUser
+      try {
+        let createdUser = await this.createUser(this.newUser);
+        this.users.push(createdUser)
+      } catch(e) {
+        console.error(e);
+        alert(e);
+      }
     }
   }
 }
