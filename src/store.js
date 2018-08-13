@@ -25,6 +25,11 @@ export default new Vuex.Store({
       state.groups.push(group);
     },
 
+    deleteGroup(state, group) {
+      let targetIndex = state.groups.findIndex(g => g._id = group._id);
+      state.groups.splice(targetIndex, 1);
+    },
+
     patchGroup(state, group) {
       let targetGroup = findGroup(state, group._id);
       groupChangeableAttrs.forEach(attr => {
@@ -182,6 +187,16 @@ export default new Vuex.Store({
       })
       context.commit('patchGroup', group);
       return response.data;
+    },
+
+    async deleteGroup(context, group) {
+      console.log('deleting group', group.name);
+      const endpoint = context.state.SERVER_ADDRESS + '/api/groups/' + group._id;
+      let { data: resp } = await axios.delete(endpoint, {
+        withCredentials: true
+      })
+      context.commit('deleteGroup', group);
+      return resp;
     },
 
     async createGroup(context, name) {

@@ -4,8 +4,9 @@
       <span class="name" :class="{ editable: editing }" contenteditable="editing">
         {{ group.name }}
       </span>
-      <a href="#" v-if="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
-      <a href="#" v-if="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a>
+      <a href="#" v-show="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
+      <a href="#" v-show="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a>
+      <a href="#" v-if="editing" @click.prevent="confirmDestroy"><i class="material-icons" title="Delete group">delete</i></a>
       <a href="#" v-else @click.prevent="toggleEditing"><i class="material-icons" title="Edit">edit</i></a>
       <!-- <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link> -->
     </h3>
@@ -45,7 +46,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateGroup', ]),
+    ...mapActions(['updateGroup', 'deleteGroup']),
 
     // TODO refactor editable field to its own component
     async save() {
@@ -53,6 +54,15 @@ export default {
       let group = {...this.group, ...this.readValues(['name'])};
       await this.updateGroup(group);
       this.group.name = group.name; // try to keep the bindings?
+    },
+
+    async confirmDestroy() {
+      if (confirm(`Are you use you want to delete ${this.group.name}`)) {
+        let gpName = this.group.name;
+        await this.deleteGroup(this.group);
+        this.$router.push({name: 'groups'});
+        alert(`group ${gpName} deleted.`);
+      }
     },
 
     cancelEditing() {
