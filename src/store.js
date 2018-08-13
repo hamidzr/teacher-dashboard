@@ -147,7 +147,7 @@ export default new Vuex.Store({
 
     async createUser(context, user) {
       console.log(`creating user ${user.username}`);
-      if (!user || !user.username || !user.groupId || !user.email || !user.password) throw new Error(`missing user data, ${user.username}}`);
+      if (!user || !user.username || !user.groupId || !user.email || !user.password) throw new Error(`missing user data, ${user.username}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members`
       let response = await axios.post(endpoint, user, {
         withCredentials: true
@@ -157,7 +157,7 @@ export default new Vuex.Store({
     },
 
     async updateUser(context, user) {
-      console.log(`updating user ${user}`);
+      console.log(`updating user ${user.username}`);
       if (!user || !user.username || !user.email) throw new Error(`missing user data, ${user}}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members/${user._id}`;
       let response = await axios.patch(endpoint, user, {
@@ -168,7 +168,7 @@ export default new Vuex.Store({
     },
 
     async deleteUser(context, user) {
-      console.log(`deleting user ${user}`);
+      console.log(`deleting user ${user.username}`);
       if (!user || !user.username || !user.email) throw new Error(`missing user data, ${user}}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members/${user._id}`;
       let response = await axios.delete(endpoint, {
@@ -179,7 +179,7 @@ export default new Vuex.Store({
     },
 
     async updateGroup(context, group) {
-      console.log(`updating group ${group}`);
+      console.log(`updating group ${group.name}`);
       if (!group || !group.name) throw new Error(`missing group data, ${group}}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${group._id}`;
       let response = await axios.patch(endpoint, group, {
