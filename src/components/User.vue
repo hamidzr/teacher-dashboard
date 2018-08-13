@@ -56,7 +56,6 @@ export default {
 
     resetFields() {
       this.setValues({
-        username: this.user.username,
         email: this.user.email,
       });
     },
@@ -68,7 +67,7 @@ export default {
           let userValues = {...this.user, ...this.readValues(['username', 'email', 'password'])};
           await this.createUser(userValues);
         } else {
-          let userValues = {...this.user, ...this.readValues(['username', 'email'])};
+          let userValues = {...this.user, ...this.readValues(['email'])};
           await this.updateUser(userValues);
         }
       } catch (e) {

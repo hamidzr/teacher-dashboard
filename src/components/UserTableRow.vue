@@ -1,6 +1,6 @@
 <template>
   <tr :id="elementId()">
-    <td class="username" :class="{ editable: editing }" :contenteditable="editing">{{ user.username }}</td>
+    <td>{{ user.username }}</td>
     <td class="email" :class="{ editable: editing }" :contenteditable="editing">{{ user.email }}</td>
     <td>
       <a href="#" v-if="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
