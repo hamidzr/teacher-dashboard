@@ -1,10 +1,9 @@
 # Teacher Dashboard
 
 ## TODO
-- improve user/group creation UI
-- components should use props to receive data or maybe store?
 - fix page titles
-- survey available admin dashboard themes
+- update lists on addition and deletion changes
+- error handling for store actions
 
 ## Installation
 ```
@@ -25,3 +24,5 @@ npm run build
 ```
 npm run lint
 ```
+### Environment Variables
+`NODE_ENV` to production
