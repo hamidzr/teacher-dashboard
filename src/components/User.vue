@@ -96,7 +96,7 @@ export default {
     readValues(keys) {
       let keyVals = {};
       keys.forEach(key => {
-        keyVals[key] = document.querySelector(`#${this.elementId()} .${key}`).innerText
+        keyVals[key] = document.querySelector(`#${this.elementId()} .${key}`).innerText.trim();
       });
       return keyVals;
     }

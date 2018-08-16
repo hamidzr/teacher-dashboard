@@ -1,9 +1,7 @@
 <template>
   <div :id="elementId()">
     <h3>
-      <span class="name" :class="{ editable: editing }" contenteditable="editing">
-        {{ group.name }}
-      </span>
+      <span class="name" :class="{ editable: editing }" contenteditable="editing">{{ group.name }}</span>
       <a href="#" v-show="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
       <a href="#" v-show="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a>
       <a href="#" v-if="editing" @click.prevent="confirmDestroy"><i class="material-icons" title="Delete group">delete</i></a>
@@ -96,7 +94,7 @@ export default {
     readValues(keys) {
       let keyVals = {};
       keys.forEach(key => {
-        keyVals[key] = document.querySelector(`#${this.elementId()} .${key}`).innerText
+        keyVals[key] = document.querySelector(`#${this.elementId()} .${key}`).innerText.trim();
       });
       return keyVals;
     },
