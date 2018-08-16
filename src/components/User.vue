@@ -44,6 +44,7 @@ export default {
         try {
           return await this.deleteUser(this.user);
         } catch (e) {
+          console.error(e.response.data);
           alert(e.response.data);
         }
       }
@@ -78,7 +79,7 @@ export default {
         // revert html values back?
         this.resetFields();
         console.error(e);
-        alert('failed to save user', e);
+        alert('failed to save user', e.response.data);
       }
     },
 

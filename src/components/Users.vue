@@ -108,8 +108,8 @@ export default {
       try {
         await this.createUser(this.newUser);
       } catch(e) {
-        console.error(e);
-        alert(e);
+        console.error(e.response.data);
+        alert(e.response.data);
       }
     }
   }

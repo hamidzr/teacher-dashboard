@@ -210,6 +210,7 @@ export default new Vuex.Store({
       let { data: group } = await axios.post(endpoint, {name: name}, {
         withCredentials: true
       })
+      console.assert(group._id !== undefined, 'malformed group response');
       context.commit('addGroup', group);
       return group;
     },

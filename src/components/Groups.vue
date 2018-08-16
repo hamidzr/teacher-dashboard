@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="grid">
-      <div v-for="group in groups" v-bind:key="group.name" class="card  teal">
+      <div v-for="group in groups" v-bind:key="group._id" class="card  teal">
         <router-link :to="{name: 'group', params: {id: group._id}}">
           <div class="card-content white-text">
             <span class="card-title">

@@ -49,16 +49,26 @@ export default {
     async save() {
       this.toggleEditing();
       let group = {...this.group, ...this.readValues(['name'])};
-      await this.updateGroup(group);
-      this.group.name = group.name; // try to keep the bindings?
+      try {
+        await this.updateGroup(group);
+        this.group.name = group.name; // try to keep the bindings?
+      } catch (e) {
+        console.error(e);
+        alert(e.response.data);
+      }
     },
 
     async confirmDestroy() {
       if (confirm(`Are you use you want to delete ${this.group.name}`)) {
         let gpName = this.group.name;
-        await this.deleteGroup(this.group);
-        this.$router.push({name: 'groups'});
-        alert(`group ${gpName} deleted.`);
+        try {
+          await this.deleteGroup(this.group);
+          this.$router.push({name: 'groups'});
+          alert(`group ${gpName} deleted.`);
+        } catch (e) {
+          console.error(e);
+          alert(e.response.data);
+        }
       }
     },
 
