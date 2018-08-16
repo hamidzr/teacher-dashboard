@@ -41,7 +41,7 @@ export default {
   },
 
   created() {
-    if (this.hasGroup()) this.loadGroupData();
+    if (this.hasGroup()) this.loadGroupData(this.id);
   },
 
   methods: {

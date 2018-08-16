@@ -19,13 +19,15 @@ export default  {
     ...mapActions(['fetchGroup', 'fetchUsers']),
 
     // loads group data. assumes that there is such data
-    async loadGroupData() {
-      await this.fetchGroup(this.id);
-      await this.fetchUsers(this.id);
-      let group = await this.getGroupById(this.id);
+    async loadGroupData(groupId) {
+      groupId = groupId || this.groupId || this.id; // backward compatibility
+      await this.fetchGroup(groupId);
+      await this.fetchUsers(groupId);
+      let group = await this.getGroupById(groupId);
       this.group = group;
       return group;
-    }
+    },
+
   },
 
 };

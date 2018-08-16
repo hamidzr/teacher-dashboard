@@ -38,11 +38,8 @@ export default {
     }
   }, // end of data
 
-  computed: {
-  },
-
   created() {
-    this.loadGroupData();
+    this.loadGroupData(this.id);
   },
 
   methods: {
