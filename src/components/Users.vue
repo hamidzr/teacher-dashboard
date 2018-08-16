@@ -43,7 +43,7 @@
       </thead>
 
       <tbody>
-        <UserTableRow v-for="user in users" :key="user.username" :user="user"/>
+        <UserTableRow v-for="user in users" :key="user._id" :user="user"/>
       </tbody>
     </table>
   </div>
@@ -51,11 +51,13 @@
 
 <script>
 import UserTableRow from '@/components/UserTableRow.vue'
+import groupMixins from '@/mixins/group'
 import { mapActions } from 'vuex'
 
 export default {
   name: 'users',
-  props: ['groupId', 'users'],
+  props: ['groupId'],
+  mixins: [groupMixins],
   data() {
     return {
       newUser: {
@@ -65,6 +67,7 @@ export default {
         password: '',
       },
 
+      users: [],
       isAddingUser: false,
     }
   },
@@ -75,7 +78,12 @@ export default {
   computed: {
     hasUsers() {
       return this.users.length !== 0;
-    }
+    },
+  },
+
+  async created() {
+    let group = await this.loadGroupData(this.groupId); // TODO (perf) duplicate fetches on group page
+    this.users = group.users;
   },
 
   methods: {
@@ -98,8 +106,7 @@ export default {
     async addUser() {
       this.isAddingUser = false;
       try {
-        let createdUser = await this.createUser(this.newUser);
-        this.users.push(createdUser)
+        await this.createUser(this.newUser);
       } catch(e) {
         console.error(e);
         alert(e);
