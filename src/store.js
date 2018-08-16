@@ -67,14 +67,14 @@ export default new Vuex.Store({
     },
 
     deleteGroupUser(state, user) {
+      console.debug(`deleting ${user.username}`);
       let group = findGroup(state, user.groupId);
       let targetIndex = group.users.findIndex(u => u._id === user._id);
       group.users.splice(targetIndex, 1);
     },
 
-    addGroupUser(state, payload) {
-      const { groupId, user } = payload;
-      let group = findGroup(state, groupId);
+    addGroupUser(state, user) {
+      let group = findGroup(state, user.groupId);
       if (!group.users) group.users = [];
       group.users.push(user);
     },
@@ -146,14 +146,19 @@ export default new Vuex.Store({
     },
 
     async createUser(context, user) {
-      console.log(`creating user ${user.username}`);
+      console.debug(`creating user ${user.username}`);
       if (!user || !user.username || !user.groupId || !user.email || !user.password) throw new Error(`missing user data, ${user.username}`);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${user.groupId}/members`
       let response = await axios.post(endpoint, user, {
         withCredentials: true
       })
-      context.commit('addGroupUser', {groupId: user.groupId, user});
-      return response.data;
+      let createdUser = response.data;
+      console.debug(`created user ${createdUser}`);
+      console.assert(createdUser._id !== undefined, 'malformed user response');
+      console.assert(createdUser.groupId !== undefined, 'malformed user response');
+      console.assert(createdUser.username === user.username, 'malformed user response');
+      context.commit('addGroupUser', createdUser);
+      return createdUser;
     },
 
     async updateUser(context, user) {
