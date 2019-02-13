@@ -12,7 +12,6 @@ const userChangeableAttrs = ['username', 'email'],
 export default {
   state: {
     groups: [],
-
   },
 
   mutations: {
