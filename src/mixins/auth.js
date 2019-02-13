@@ -15,7 +15,6 @@ export default  {
     // fetches and updates the user state
     async fetchUser() {
       // findout the login status and return it
-      console.log(this.$store.state)
       let user;
       try {
         user = await this.authenticator.getProfile()
