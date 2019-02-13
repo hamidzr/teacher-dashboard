@@ -18,6 +18,14 @@ export default {
       state.robots = robots;
     },
 
+    addRobot(state, robot) {
+      if (!findRobot(state, robot.robotId)) {
+        state.robots.push(robot);
+      } else {
+        console.log('refused to add duplicate robot');
+      }
+    },
+
     updateRobot(state, robot) {
       let targetRobot = findRobot(state, robot.robotId);
       console.assert(targetRobot, 'robot is missing');
@@ -95,12 +103,12 @@ export default {
       return robots;
     },
 
-    async fetchRobot(context, robotId) {
-      const endpoint = context.state.SERVER_ADDRESS + '/api/robots/' + robotId
+    async fetchRobot(context, mongoId) {
+      const endpoint = context.state.SERVER_ADDRESS + '/api/roboscape/robots/' + mongoId
       let { data: robot } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      let existingRobot = findRobot(context.state, robotId);
+      let existingRobot = findRobot(context.state, robot.robotId);
       if (existingRobot) {
         context.commit('updateRobot', robot);
       } else {
@@ -112,7 +120,7 @@ export default {
     async addUser(context, user) {
       console.debug(`creating user ${user.username}`);
       if (!user || !user.username || !user.robotId || !user.email || !user.password) throw new Error(`missing user data, ${user.username}`);
-      const endpoint = context.state.SERVER_ADDRESS + `/api/robots/${user.robotId}/members`
+      const endpoint = context.state.SERVER_ADDRESS + `/api/roboscape/robots/${user.robotId}/members`
       let response = await axios.post(endpoint, user, {
         withCredentials: true
       })
@@ -128,7 +136,7 @@ export default {
     async updateUser(context, user) {
       console.log(`updating user ${user.username}`);
       if (!user || !user.username || !user.email) throw new Error(`missing user data, ${user}}`);
-      const endpoint = context.state.SERVER_ADDRESS + `/api/robots/${user.robotId}/members/${user._id}`;
+      const endpoint = context.state.SERVER_ADDRESS + `/api/roboscape/robots/${user.robotId}/members/${user._id}`;
       let response = await axios.patch(endpoint, user, {
         withCredentials: true
       })
@@ -139,7 +147,7 @@ export default {
     async updateRobot(context, robot) {
       console.log(`updating robot ${robot.name}`);
       if (!robot || !robot.name) throw new Error(`missing robot data, ${robot}}`);
-      const endpoint = context.state.SERVER_ADDRESS + `/api/robots/${robot._id}`;
+      const endpoint = context.state.SERVER_ADDRESS + `/api/roboscape/robots/${robot._id}`;
       let response = await axios.patch(endpoint, robot, {
         withCredentials: true
       })

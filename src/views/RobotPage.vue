@@ -1,5 +1,5 @@
 <template>
-  <div :id="elementId()">
+  <div :id="elementId()" v-if="robot">
     <h3>
       <span class="name" :class="{ editable: editing }" contenteditable="editing">{{ robot.robotId }}</span>
       <a href="#" v-show="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
@@ -31,15 +31,16 @@ export default {
         email: '',
         password: '',
       },
+      robot: {},
     }
   }, // end of data
 
-  created() {
-    this.loadRobotData(this.id);
+  async created() {
+    this.robot = await this.fetchRobot(this.id);
   },
 
   methods: {
-    ...mapActions(['updateRobot']),
+    ...mapActions(['updateRobot', 'fetchRobot']),
 
     // TODO refactor editable field to its own component
     async save() {
