@@ -7,13 +7,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    SERVER_ADDRESS: 'http://localhost:8080',
+    SERVER_ADDRESS: window.localStorage.getItem('SERVER_ADDRESS') || 'http://localhost:8080',
     user: undefined,
     ...sandboxStore.state,
     ...roboscapeStore.state,
   },
 
   mutations: {
+    setServerAddress(state, address) {
+      state.SERVER_ADDRESS = address;
+      window.localStorage.setItem('SERVER_ADDRESS', address);
+    },
     ...sandboxStore.mutations,
     ...roboscapeStore.mutations,
   },
