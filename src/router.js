@@ -4,6 +4,9 @@ import Home from './views/Home.vue'
 import GroupPage from './views/GroupPage.vue'
 import GroupsPage from './views/GroupsPage.vue'
 import GroupChangePage from './views/GroupChangePage.vue'
+import RobotPage from './views/RobotPage.vue'
+import RobotsPage from './views/RobotsPage.vue'
+import RobotChangePage from './views/RobotChangePage.vue'
 import Help from './views/Help.vue'
 import store from './store'
 
@@ -36,6 +39,23 @@ export default new Router({
       path: '/groups/:id',
       name: 'group',
       component: GroupPage,
+      props: true
+    },
+    {
+      path: '/robots',
+      name: 'robots',
+      component: RobotsPage,
+    },
+    {
+      path: '/robots/:id/edit',
+      name: 'robotEdit',
+      component: RobotChangePage,
+      props: true
+    },
+    { // used for viewing
+      path: '/robots/:id',
+      name: 'robot',
+      component: RobotPage,
       props: true
     },
     {

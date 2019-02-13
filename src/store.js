@@ -15,7 +15,7 @@ const userChangeableAttrs = ['username', 'email'],
 
 export default new Vuex.Store({
   state: {
-    SERVER_ADDRESS: 'http://localhost:8080',
+    SERVER_ADDRESS: 'https://editor2.vandycloud.tk',
     user: undefined,
     groups: [],
   },
@@ -217,3 +217,5 @@ export default new Vuex.Store({
 
   }
 })
+
+// TODO fetchRobots and updateRobot
