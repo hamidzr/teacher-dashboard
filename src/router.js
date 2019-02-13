@@ -8,7 +8,7 @@ import RobotPage from './views/RobotPage.vue'
 import RobotsPage from './views/RobotsPage.vue'
 import RobotChangePage from './views/RobotChangePage.vue'
 import Help from './views/Help.vue'
-import store from './store'
+import store from '@/store'
 
 Vue.use(Router)
 
