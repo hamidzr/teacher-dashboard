@@ -68,7 +68,13 @@ export default {
   getters: {
     getRobotById(state) {
       return robotId => {
-        return state.robots.find(r => r.robotId === robotId)
+        return state.robots.find(r => r.robotId === robotId);
+      }
+    },
+
+    getRobotByMongoId(state) {
+      return mongoId => {
+        return state.robots.find(r => r._id === mongoId);
       }
     },
 

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h2>Your Robots
-      <a href="#" @click.prevent="fetchRobots">&#8635;</a>
+      <a href="#" @click.prevent="fetchRobots"><i class="material-icons" title="reload">cached</i></a>
     </h2>
     <Robots />
   </div>
