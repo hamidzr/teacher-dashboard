@@ -1,7 +1,7 @@
 <template>
   <div :id="elementId()">
     <h3>
-      <span class="name" :class="{ editable: editing }" contenteditable="editing">{{ robot.name }}</span>
+      <span class="name" :class="{ editable: editing }" contenteditable="editing">{{ robot.robotId }}</span>
       <a href="#" v-show="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
       <a href="#" v-show="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a>
       <a href="#" v-if="editing" @click.prevent="confirmDestroy"><i class="material-icons" title="Delete robot">delete</i></a>
@@ -49,7 +49,7 @@ export default {
       let robot = {...this.robot, ...this.readValues(['name'])};
       try {
         await this.updateRobot(robot);
-        this.robot.name = robot.name; // try to keep the bindings?
+        this.robot.robotId = robot.name; // try to keep the bindings?
       } catch (e) {
         console.error(e);
         alert(e.response.data);
@@ -57,12 +57,12 @@ export default {
     },
 
     async confirmDestroy() {
-      if (confirm(`Are you use you want to delete ${this.robot.name}`)) {
-        let gpName = this.robot.name;
+      if (confirm(`Are you use you want to delete ${this.robot.robotId}`)) {
+        let robotName = this.robot.robotId;
         try {
           await this.deleteRobot(this.robot);
           this.$router.push({name: 'robots'});
-          alert(`robot ${gpName} deleted.`);
+          alert(`robot ${robotName} deleted.`);
         } catch (e) {
           console.error(e);
           alert(e.response.data);
@@ -77,7 +77,7 @@ export default {
 
     resetFields() {
       this.setValues({
-        name: this.robot.name
+        name: this.robot.robotId
       })
     },
 

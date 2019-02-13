@@ -2,7 +2,7 @@
   <div>
     <form>
       <label>Robot name: </label>
-      <input type="text" v-model="robot.name"/>
+      <input type="text" v-model="robot.robotId"/>
       <button v-if="isEditing" @click.prevent="updateRobot(robot)">Update</button>
     </form>
   </div>

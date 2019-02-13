@@ -5,7 +5,7 @@
         <router-link :to="{name: 'robot', params: {id: robot._id}}">
           <div class="card-content white-text">
             <span class="card-title">
-              {{ robot.name }}
+              {{ robot.robotId }}
             </span>
             <p>robot description or users here</p>
           </div>
