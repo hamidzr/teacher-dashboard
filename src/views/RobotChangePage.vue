@@ -13,12 +13,10 @@ import { mapActions } from 'vuex'
 import RobotForm from '@/components/RobotForm.vue'
 import UserForm from '@/components/UserForm.vue'
 import Users from '@/components/Users.vue'
-import groupMixin from '@/mixins/group'
 
 export default {
   name: 'groupChangePage',
   props: ['id'],
-  mixins: [groupMixin],
 
   components: {
     RobotForm,

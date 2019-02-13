@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import robotMixin from '@/mixins/robot'
 import { mapActions } from 'vuex'
 import Users from '@/components/Users.vue'
 
@@ -21,7 +20,6 @@ import Users from '@/components/Users.vue'
 export default {
   name: 'robotPage',
   props: ['id'],
-  mixins: [robotMixin],
   components: {
     Users,
   },
