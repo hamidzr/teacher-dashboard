@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    SERVER_ADDRESS: 'https://editor2.vandycloud.tk',
+    SERVER_ADDRESS: 'http://localhost:8080',
     user: undefined,
     ...sandboxStore.state,
     ...roboscapeStore.state,
