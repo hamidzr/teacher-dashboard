@@ -7,7 +7,7 @@
             <span class="card-title">
               {{ robot.robotId }}
             </span>
-            <p>robot description or users here</p>
+            <p>Public: {{ robot.isPublic }}, Users: {{ robot.users.length }}</p>
           </div>
         </router-link>
       </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h2>Your Robots
-      <a href="#" @click.prevent="newRobot">+</a>
+      <a href="#" @click.prevent="fetchRobots">&#8635;</a>
     </h2>
     <Robots />
   </div>
@@ -22,7 +22,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['updateRobot']),
+    ...mapActions(['updateRobot', 'fetchRobots']),
   }
 }
 </script>
