@@ -127,13 +127,19 @@ export default {
     },
 
     async updateRobot(context, robot) {
-      console.log(`updating robot ${robot.name}`);
-      if (!robot || !robot.name) throw new Error(`missing robot data, ${robot}}`);
+      console.log(robot);
+      console.log(`updating robot ${robot.robotId}`);
+      if (!robot || !robot.robotId) throw new Error('missing robot data');
       const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT + `/${robot._id}`;
-      let response = await axios.patch(endpoint, robot, {
-        withCredentials: true
-      })
-      context.commit('patchRobot', robot);
+      let response = await axios.put(endpoint,
+        { // data / body
+          isPublic: robot.isPublic,
+          users: robot.users,
+        },
+        {
+          withCredentials: true
+        })
+      context.commit('updateRobot', robot);
       return response.data;
     },
 

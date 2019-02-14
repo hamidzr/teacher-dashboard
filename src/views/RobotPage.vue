@@ -2,13 +2,13 @@
   <div :id="elementId()" v-if="robot">
     <h3>
       <span class="name" :class="{ editable: editing }" contenteditable="editing">Robot: {{ robot.robotId }}</span>
-      <!-- <a href="#" v-show="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a> -->
-      <!-- <a href="#" v-show="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a> -->
-      <!-- <a href="#" v-if="editing" @click.prevent="confirmDestroy"><i class="material-icons" title="Delete robot">delete</i></a> -->
       <a href="#" @click.prevent="pullRobotInfo"><i class="material-icons" title="reload">cached</i></a>
       <!-- <router-link :to="{name: 'robotEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link> -->
     </h3>
-    <p>Public: {{ robot.isPublic }}</p>
+    <p>Public:
+      <a href="#" v-show="robot.isPublic" @click.prevent="togglePublicAccess"><i class="material-icons" title="Public">check</i></a>
+      <a href="#" v-show="!robot.isPublic" @click.prevent="togglePublicAccess"><i class="material-icons" title="Protected">close</i></a>
+    </p>
 
     <div>
       <!-- search bar and useradd bar -->
@@ -181,6 +181,16 @@ export default {
 
     toggleAddingUser() {
       this.isAddingUser = !this.isAddingUser;
+    },
+
+    async togglePublicAccess() {
+      this.robot.isPublic = ! this.robot.isPublic;
+      try {
+        await this.updateRobot(this.robot);
+      } catch (e) {
+        console.error(e);
+        this.robot.isPublic = ! this.robot.isPublic;
+      }
     }
   }
 }
