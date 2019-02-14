@@ -2,13 +2,13 @@ import axios from 'axios'
 
 const BASE_ENDPOINT = '/api/roboscape/robots';
 
+
 const findRobot = (state, robotId) => {
   // there is no access to getters in mutations
   return state.robots.find(r => r.robotId === robotId)
 };
 
-const userChangeableAttrs = ['hasAccess'],
-  robotChangeableAttrs = ['isPublic', 'users'];
+const robotChangeableAttrs = ['isPublic', 'users'];
 
 export default {
   state: {
@@ -24,7 +24,7 @@ export default {
       if (!findRobot(state, robot.robotId)) {
         state.robots.push(robot);
       } else {
-        console.log('refused to add duplicate robot');
+        console.error('refused to add duplicate robot');
       }
     },
 
@@ -37,32 +37,6 @@ export default {
         }
       })
       targetRobot.users = robot.users || [];
-    },
-
-    // update a single user
-    // payload user should have a robotId
-    patchRobotUser(state, user) {
-      const { robotId, username } = user;
-      let robotUsers = findRobot(state, robotId).users;
-      let targetUser = robotUsers.find(u => u.username = username);
-      userChangeableAttrs.forEach(att => {
-        if (user[att] !== undefined) {
-          targetUser[att] = user[att];
-        }
-      })
-    },
-
-    addRobotUser(state, user) {
-      let robot = findRobot(state, user.robotId);
-      if (!robot.users) robot.users = [];
-      robot.users.push(user);
-    },
-
-    deleteRobotUser(state, user) {
-      console.debug(`deleting ${user.username}`);
-      let robot = findRobot(state, user.robotId);
-      let targetIndex = robot.users.findIndex(u => u._id === user._id);
-      robot.users.splice(targetIndex, 1);
     },
 
   },
@@ -101,6 +75,7 @@ export default {
 
   },
 
+  // TODO actions shouldn't return anything ( all goes through the state)
   actions: {
     async fetchRobots(context) {
       const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT;
@@ -125,31 +100,30 @@ export default {
       return robot;
     },
 
-    async addUser(context, user) {
-      console.debug(`creating user ${user.username}`);
-      if (!user || !user.username || !user.robotId || !user.email || !user.password) throw new Error(`missing user data, ${user.username}`);
-      const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT + `/${user.robotId}/members`
-      let response = await axios.post(endpoint, user, {
-        withCredentials: true
-      })
-      let createdUser = response.data;
-      console.debug(`created user ${createdUser}`);
-      console.assert(createdUser._id !== undefined, 'malformed user response');
-      console.assert(createdUser.robotId !== undefined, 'malformed user response');
-      console.assert(createdUser.username === user.username, 'malformed user response');
-      context.commit('addRobotUser', createdUser);
-      return createdUser;
+    // adds or updates the robot
+    ensureRobot(context, robot) {
+      if (!findRobot(context.state, robot.robotId)) {
+        context.commit('addRobot', robot);
+      } else {
+        context.commit('updateRobot', robot);
+      }
     },
 
-    async updateUser(context, user) {
-      console.log(`updating user ${user.username}`);
-      if (!user || !user.username || !user.email) throw new Error(`missing user data, ${user}}`);
-      const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT + `/${user.robotId}/members/${user._id}`;
-      let response = await axios.patch(endpoint, user, {
+    // updates the user access to robot creating an entry if needed
+    // user should have a username and a hasAccess field
+    // ensures that user has the requested access
+    async updateUserAccess(context, payload) {
+      let { robotMongoId, user } = payload;
+      if (typeof user.hasAccess === 'string') {
+        user.hasAccess = user.hasAccess === 'true' ?  true : false;
+      }
+      console.log('updating user:', user, 'for robot', robotMongoId);
+      const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT + `/${robotMongoId}/users`;
+      let { data: robot } = await axios.put(endpoint, user, {
         withCredentials: true
       })
-      context.commit('patchRobotUser', user);
-      return response.data;
+      context.dispatch('ensureRobot', robot);
+      return robot;
     },
 
     async updateRobot(context, robot) {
