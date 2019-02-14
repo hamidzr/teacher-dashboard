@@ -117,7 +117,6 @@ export default {
       if (typeof user.hasAccess === 'string') {
         user.hasAccess = user.hasAccess === 'true' ?  true : false;
       }
-      console.log('updating user:', user, 'for robot', robotMongoId);
       const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT + `/${robotMongoId}/users`;
       let { data: robot } = await axios.put(endpoint, user, {
         withCredentials: true
@@ -127,8 +126,6 @@ export default {
     },
 
     async updateRobot(context, robot) {
-      console.log(robot);
-      console.log(`updating robot ${robot.robotId}`);
       if (!robot || !robot.robotId) throw new Error('missing robot data');
       const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT + `/${robot._id}`;
       let response = await axios.put(endpoint,
