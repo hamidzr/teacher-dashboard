@@ -5,7 +5,7 @@
       <!-- <a href="#" v-show="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a> -->
       <!-- <a href="#" v-show="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a> -->
       <!-- <a href="#" v-if="editing" @click.prevent="confirmDestroy"><i class="material-icons" title="Delete robot">delete</i></a> -->
-      <a href="#" @click.prevent="fetchRobot(this.id)"><i class="material-icons" title="reload">cached</i></a>
+      <a href="#" @click.prevent="pullRobotInfo"><i class="material-icons" title="reload">cached</i></a>
       <!-- <router-link :to="{name: 'robotEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link> -->
     </h3>
     <p>Public: {{ robot.isPublic }}</p>
@@ -29,10 +29,15 @@
         </div>
         <div class="col s6">
           hasAccess:
-          <div class="input-field inline">
-            <input v-model="newUser.email" type="email" class="validate">
-            <!-- <label for="email_inline">Email</label> -->
-          </div>
+          <!-- FIXME positioning -->
+          <label>
+            <input name="group1" type="radio" value="true" v-model="newUser.hasAccess" checked />
+            <span>True</span>
+          </label>
+          <label>
+            <input name="group1" value="false" v-model="newUser.hasAccess" type="radio"/>
+            <span>False</span>
+          </label>
         </div>
       </div>
 
@@ -62,7 +67,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'robotPage',
-  props: ['id'],
+  props: ['id'], // robot mongo id
   //components: {
   //  Users,
   //},
@@ -71,8 +76,7 @@ export default {
       editing: false,
       newUser: {
         username: '',
-        hasAccess: '',
-        updatedAt: '',
+        hasAccess: 'true',
       },
       isAddingUser: false,
     }
@@ -87,26 +91,45 @@ export default {
       return this.robot.users.length !== 0;
     },
 
+    allowedUsers() {
+      return this.robot.users.filter(u => u.hasAccess);
+    }
   },
 
   async created() {
-    await this.fetchRobot(this.id);
+    this.pullRobotInfo();
   },
 
   methods: {
-    ...mapActions(['updateRobot', 'fetchRobot']),
+    ...mapActions(['updateRobot', 'fetchRobot', 'updateUserAccess']),
 
     // TODO refactor editable field to its own component
     async save() {
       this.toggleEditing();
-      let robot = {...this.robot, ...this.readValues(['name'])};
+    },
+
+    resetNewUser() {
+      this.newUser = {
+        username: '',
+        hasAccess: 'true',
+      }
+    },
+
+    async pullRobotInfo() {
+      return this.fetchRobot(this.id);
+    },
+
+    async addUser() {
+      let newUser = this.newUser;
+      console.log('gonna ad user', newUser.username);
       try {
-        await this.updateRobot(robot);
-        this.robot.robotId = robot.name; // try to keep the bindings?
+        await this.updateUserAccess({robotMongoId: this.id, user: this.newUser});
       } catch (e) {
         console.error(e);
         alert(e.response.data);
       }
+      this.toggleAddingUser();
+      this.resetNewUser();
     },
 
     async confirmDestroy() {
