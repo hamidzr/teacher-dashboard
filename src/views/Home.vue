@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <img src="../assets/logo.png">
+    <a :href="SERVER_ADDRESS" target="_blank"><img src="../assets/logo.png"></a>
     <p>Welcome to NetsBlox teacher dashboard.</p>
-    <p>Server address: {{ SERVER_ADDRESS }}</p>
+    <p>Server address: <a :href="SERVER_ADDRESS" target="_blank">{{ SERVER_ADDRESS }}</a></p>
   </div>
 </template>
 
