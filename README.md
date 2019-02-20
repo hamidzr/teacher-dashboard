@@ -2,14 +2,12 @@
 
 ## TODO
 
-### Client Side
-- fix page titles
-- update lists on addition and deletion changes
-- error handling for store actions
-
-### Server Side
-- models for persisting robot, owner, user relations
-- endpoints
+- [ ] fix page titles
+- [x] update lists on addition and deletion changes
+- [ ] error handling for store actions
+- [x] endpoints
+- [ ] batch adding of users
+- [ ] easier association of user groups to robots
 
 ## Installation
 Modules necessary for running and building the app won't be installed in production environment.
