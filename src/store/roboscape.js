@@ -17,7 +17,7 @@ const robotChangeableAttrs = ['isPublic', 'users'];
 export default {
   state: {
     robots: [],
-    mostlyAliveRobots: [],
+    liveRobots: [], // mostly alive, 2min timeout
   },
 
   mutations: {
@@ -34,7 +34,7 @@ export default {
     },
 
     setAliveRobots(state, robots) {
-      state.mostlyAliveRobots = robots;
+      state.liveRobots = robots;
     },
 
     updateRobot(state, robot) {

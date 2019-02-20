@@ -17,12 +17,19 @@ export default {
     Robots
   },
 
+  data() {
+    return {
+    }
+  },
+
   computed: {
-    robots() {return this.$store.state.robots}
+  },
+
+  async created() {
   },
 
   methods: {
-    ...mapActions(['updateRobot', 'fetchRobots']),
+    ...mapActions(['fetchRobots']),
   }
 }
 </script>
