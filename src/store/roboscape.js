@@ -1,6 +1,10 @@
 import axios from 'axios'
 
+// custom routes endpoint
 const BASE_ENDPOINT = '/api/roboscape/robots';
+
+// service endpoint
+const SERVICE_ENDPOINT = '/rpc//RoboScape';
 
 
 const findRobot = (state, robotId) => {
@@ -13,6 +17,7 @@ const robotChangeableAttrs = ['isPublic', 'users'];
 export default {
   state: {
     robots: [],
+    mostlyAliveRobots: [],
   },
 
   mutations: {
@@ -26,6 +31,10 @@ export default {
       } else {
         console.error('refused to add duplicate robot');
       }
+    },
+
+    setAliveRobots(state, robots) {
+      state.mostlyAliveRobots = robots;
     },
 
     updateRobot(state, robot) {
@@ -139,6 +148,16 @@ export default {
       context.commit('updateRobot', robot);
       return response.data;
     },
+
+    async fetchAliveRobots(context) {
+      const endpoint = context.state.SERVER_ADDRESS + SERVICE_ENDPOINT + '/getRobots?uuid=FAKE_CLIENTID&projectId=FAKE_PROJID';
+      let {data} = await axios.post(endpoint,
+        {
+          withCredentials: true
+        })
+      context.commit('setAliveRobots', data);
+      return data;
+    }
 
   },
 }
