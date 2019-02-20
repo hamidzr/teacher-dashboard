@@ -7,6 +7,9 @@
             <span class="card-title">
               {{ robot.robotId }}
             </span>
+              <i v-if="robot.isLive" class="material-icons" title="recently online">signal_wifi_4_bar</i>
+              <i v-else class="material-icons" title="offline">signal_wifi_off </i>
+
             <p>{{ robot.isPublic ? 'Public' : 'Protected' }}, Users: {{ robot.users.length }}</p>
           </div>
         </router-link>
@@ -22,16 +25,25 @@ export default {
   name: 'robots',
   data() {
     return {
+      state: this.$store.state,
     }
   }, // end of data
   created() {
-    this.fetchRobots()
+    this.fetchRobots();
+    this.fetchAliveRobots();
   },
   computed: {
-    robots() {return this.$store.state.robots}
+    robots() { // almost
+      let robots = this.state.robots;
+      robots = robots.map(r => {
+        r.isLive = this.state.liveRobots.includes(r.robotId);
+        return r;
+      });
+      return robots;
+    },
   },
   methods: {
-  ...mapActions(['fetchRobots'])
+    ...mapActions(['fetchRobots', 'fetchAliveRobots'])
   }
 }
 </script>
