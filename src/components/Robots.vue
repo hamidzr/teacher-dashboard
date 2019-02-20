@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="grid">
-      <div v-for="robot in robots" v-bind:key="robot._id" class="card  teal">
+      <div v-for="robot in robots" v-bind:key="robot._id" class="card" :class="{ teal: robot.isPublic, blue: !robot.isPublic }">
         <router-link :to="{name: 'robot', params: {id: robot._id}}">
           <div class="card-content white-text">
             <span class="card-title">
               {{ robot.robotId }}
             </span>
-            <p>Public: {{ robot.isPublic }}, Users: {{ robot.users.length }}</p>
+            <p>{{ robot.isPublic ? 'Public' : 'Protected' }}, Users: {{ robot.users.length }}</p>
           </div>
         </router-link>
       </div>
