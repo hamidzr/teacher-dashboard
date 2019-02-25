@@ -137,7 +137,7 @@ export default {
     async updateRobot(context, robot) {
       if (!robot || !robot.robotId) throw new Error('missing robot data');
       const endpoint = context.state.SERVER_ADDRESS + BASE_ENDPOINT + `/${robot._id}`;
-      let response = await axios.put(endpoint,
+      let response = await axios.patch(endpoint,
         { // data / body
           isPublic: robot.isPublic,
           users: robot.users,
