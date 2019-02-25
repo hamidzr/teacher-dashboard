@@ -150,7 +150,8 @@ export default {
     },
 
     async fetchAliveRobots(context) {
-      const endpoint = context.state.SERVER_ADDRESS + SERVICE_ENDPOINT + '/getRobots?uuid=FAKE_CLIENTID&projectId=FAKE_PROJID';
+      const clientId = navigator.userAgent.replace(/ /g, '_');
+      const endpoint = context.state.SERVER_ADDRESS + SERVICE_ENDPOINT + `/getRobots?uuid=${clientId}&projectId=NB_DASHBOARD`;
       let {data} = await axios.post(endpoint,
         {
           withCredentials: true
