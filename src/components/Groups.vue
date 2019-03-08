@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="!hasGroups">
+      <p>Add a group to see it here.</p>
+    </div>
     <div class="grid">
       <div v-for="group in groups" v-bind:key="group._id" class="card  teal">
         <router-link :to="{name: 'group', params: {id: group._id}}">
@@ -7,7 +10,7 @@
             <span class="card-title">
               {{ group.name }}
             </span>
-            <p>group description or users here</p>
+            <p>No description provided.</p>
           </div>
         </router-link>
       </div>
@@ -28,10 +31,13 @@ export default {
     this.fetchGroups()
   },
   computed: {
-    groups() {return this.$store.state.groups}
+    groups() {return this.$store.state.groups},
+    hasGroups() {
+      return this.$store.state.groups.length !== 0;
+    },
   },
   methods: {
-  ...mapActions(['fetchGroups'])
+    ...mapActions(['fetchGroups'])
   }
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="!hasRobots">
+      <p>Setup a robot to see it here.</p>
+    </div>
     <div class="grid">
       <div v-for="robot in robots" v-bind:key="robot._id" class="card" :class="{ teal: robot.isPublic, blue: !robot.isPublic }">
         <router-link :to="{name: 'robot', params: {id: robot._id}}">
@@ -40,6 +43,9 @@ export default {
         return r;
       });
       return robots;
+    },
+    hasRobots() {
+      return this.$store.state.robots.length !== 0;
     },
   },
   methods: {
