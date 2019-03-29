@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <a :href="SERVER_ADDRESS" target="_blank"><img src="/images/logo.png"></a>
+    <a :href="SERVER_ADDRESS" target="_blank"><img alt="NetsBlox logo" src="/images/logo.png"></a>
     <p>Welcome to NetsBlox teacher dashboard.</p>
     <p>Server address: <a :href="SERVER_ADDRESS" target="_blank">{{ SERVER_ADDRESS }}</a></p>
   </div>

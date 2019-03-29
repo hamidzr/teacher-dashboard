@@ -1,13 +1,13 @@
 <template>
   <header>
-    <div id="nav">
+    <nav id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/groups">Groups</router-link> |
       <router-link to="/robots">Roboscape</router-link> |
       <router-link to="/help">Help</router-link> |
       <router-link v-if="!user" to="/login">Login</router-link>
       <a href="#" v-if="!!user" @click="logoutWithConfirm">Logout ({{ user.username }})</a>
-    </div>
+    </nav>
   </header>
 </template>
 
@@ -39,8 +39,9 @@ header {
   margin-bottom: 1rem;
 }
 
-#nav { /* should be using nav */
-  padding: 30px;
+nav { /* should be using nav */
+  background-color: unset;
+  box-shadow: unset;
   a {
     font-weight: bold;
     color: #2c3e50;
