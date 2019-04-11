@@ -54,7 +54,12 @@
 
       <tbody>
         <tr v-for="user in robot.users" :key="user.username">
-          <td>{{ user.username }}</td><td>{{ user.hasAccess }}</td><td>{{ user.updatedAt }}</td>
+          <td>{{ user.username }}</td>
+          <td>
+            <a href="#" v-if="user.hasAccess" @click.prevent="toggleUserAccess(user)"><i class="material-icons" title="true">check</i></a>
+            <a href="#" v-else @click.prevent="toggleUserAccess(user)"><i class="material-icons" title="false">close</i></a>
+          </td>
+          <td>{{ user.updatedAt }}</td>
         </tr>
         <!-- <UserTableRow v-for="user in users" :key="user._id" :user="user"/> -->
       </tbody>
@@ -191,7 +196,12 @@ export default {
         console.error(e);
         this.robot.isPublic = ! this.robot.isPublic;
       }
-    }
+    },
+
+    async toggleUserAccess(user) {
+      user.hasAccess = !user.hasAccess;
+      await this.updateUserAccess({robotMongoId: this.id, user});
+    },
   }
 }
 </script>
