@@ -20,25 +20,11 @@
 
     <div v-if="isAddingUser">
       <div class="row">
-        <div class="col s6">
           Username:
           <div class="input-field inline">
             <input v-model="newUser.username" type="text">
             <!-- <label for="email_inline">Username</label> -->
           </div>
-        </div>
-        <div class="col s6">
-          hasAccess:
-          <!-- FIXME positioning -->
-          <label>
-            <input name="group1" type="radio" value="true" v-model="newUser.hasAccess" checked />
-            <span>True</span>
-          </label>
-          <label>
-            <input name="group1" value="false" v-model="newUser.hasAccess" type="radio"/>
-            <span>False</span>
-          </label>
-        </div>
       </div>
 
     </div>
@@ -81,9 +67,10 @@ export default {
       editing: false,
       newUser: {
         username: '',
-        hasAccess: 'true',
+        hasAccess: true,
       },
       isAddingUser: false,
+      isBulkAddingUser: false,
     }
   }, // end of data
 
@@ -116,7 +103,7 @@ export default {
     resetNewUser() {
       this.newUser = {
         username: '',
-        hasAccess: 'true',
+        hasAccess: true,
       }
     },
 
