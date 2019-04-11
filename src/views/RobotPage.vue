@@ -13,17 +13,16 @@
     <div>
       <!-- search bar and useradd bar -->
       <h5>Users: <a href="#" v-show="!isAddingUser" @click.prevent="toggleAddingUser" title="Create a new member">+</a>
-        <a href="#" v-show="isAddingUser" @click.prevent="addUser"><i class="material-icons" title="Save user">check</i></a>
+        <a href="#" v-show="isAddingUser" @click.prevent="addUserSubmit"><i class="material-icons" title="Save user">check</i></a>
         <a href="#" v-show="isAddingUser" @click.prevent="toggleAddingUser"><i class="material-icons" title="Cancel">close</i></a>
       </h5>
     </div>
 
     <div v-if="isAddingUser">
       <div class="row">
-          Username:
+          Username(s):
           <div class="input-field inline">
-            <input v-model="newUser.username" type="text">
-            <!-- <label for="email_inline">Username</label> -->
+            <input v-model="newUser.username" placeholder="user1, user2" type="text">
           </div>
       </div>
 
@@ -59,9 +58,6 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'robotPage',
   props: ['id'], // robot mongo id
-  //components: {
-  //  Users,
-  //},
   data() {
     return {
       editing: false,
@@ -111,15 +107,38 @@ export default {
       return this.fetchRobot(this.id);
     },
 
-    async addUser() {
-      let newUser = this.newUser;
-      console.log('gonna ad user', newUser.username);
-      try {
-        await this.updateUserAccess({robotMongoId: this.id, user: this.newUser});
-      } catch (e) {
-        console.error(e);
-        alert(e.response.data);
+    async addSingleUser(user) {
+      console.log('adding user', user.username);
+      return this.updateUserAccess({robotMongoId: this.id, user});
+    },
+
+    // handles add user form submission
+    async addUserSubmit() {
+      // if a single user or multiple
+      const DELIMITER = ', ';
+      if (this.newUser.username.includes(DELIMITER)) {
+        let usernames = this.newUser.username.split(DELIMITER);
+        let errors = [];
+        for (let username of usernames) {
+          try {
+            await this.addSingleUser({username, hasAccess: true});
+          } catch (e) {
+            errors.push(e);
+          }
+        }
+        if (errors.length) {
+          console.error(errors);
+          alert(errors.map(e => e.response.data));
+        }
+      } else {
+        try {
+          await this.addSingleUser(this.newUser);
+        } catch (e) {
+          console.error(e);
+          alert(e.response.data);
+        }
       }
+
       this.toggleAddingUser();
       this.resetNewUser();
     },
