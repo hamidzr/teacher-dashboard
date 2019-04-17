@@ -34,6 +34,7 @@
           <th>Username</th>
           <th>Has Access</th>
           <th>Updated At</th>
+          <th>Actions</th>
         </tr>
       </thead>
 
@@ -45,6 +46,9 @@
             <a href="#" v-else @click.prevent="toggleUserAccess(user)"><i class="material-icons" title="false">close</i></a>
           </td>
           <td>{{ user.updatedAt }}</td>
+          <td>
+            <i @click="deleteUser(user)" class="button material-icons" title="delete">delete</i>
+          </td>
         </tr>
         <!-- <UserTableRow v-for="user in users" :key="user._id" :user="user"/> -->
       </tbody>
@@ -205,10 +209,33 @@ export default {
     },
 
     async toggleUserAccess(user) {
-      user.hasAccess = !user.hasAccess;
-      await this.updateUserAccess({robotMongoId: this.id, user});
+      try {
+        await this.updateUserAccess({robotMongoId: this.id, user: {...user, hasAccess: !user.hasAccess}});
+      } catch (e) {
+        alert(`failed to update access for user ${user.username}`);
+      }
     },
+
+    async deleteUser(user) {
+      if (!confirm(`Are you use you want to delete ${this.robot.robotId}`)) return;
+      let users = [...this.robot.users];
+      let uIndex = users.findIndex(u => u.username === user.username);
+      users.splice(uIndex, 1);
+
+      try {
+        await this.updateRobot({...this.robot, users: users});
+      } catch (e) {
+        alert(`failed to remove user ${user.username}`);
+      }
+    }
   }
 }
 </script>
+
+<style scoped>
+  i.button {
+    cursor: pointer;
+    color: #039be5;
+  }
+</style>
 
