@@ -150,6 +150,7 @@ export default {
     },
 
     async fetchAliveRobots(context) {
+      // FIXME can't fetch protected robots since caller isn't ever set for this client
       const clientId = navigator.userAgent.replace(/ /g, '_');
       const endpoint = context.state.SERVER_ADDRESS + SERVICE_ENDPOINT + `/getRobots?uuid=${clientId}&projectId=NB_DASHBOARD`;
       let {data} = await axios.post(endpoint,

@@ -10,8 +10,8 @@
             <span class="card-title">
               {{ robot.robotId }}
             </span>
-              <i v-if="robot.isLive" class="material-icons" title="recently online">signal_wifi_4_bar</i>
-              <i v-else class="material-icons" title="offline">signal_wifi_off </i>
+              <!-- <i v-if="robot.isLive" class="material-icons" title="recently online">signal_wifi_4_bar</i> -->
+              <!-- <i v-else class="material-icons" title="offline">signal_wifi_off </i> -->
 
             <p>{{ robot.isPublic ? 'Public' : 'Protected' }}, Users: {{ robot.users.length }}</p>
           </div>
