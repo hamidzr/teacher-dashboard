@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <h2>Your Robots
-      <a href="#" @click.prevent="fetchRobots"><i class="material-icons" title="reload">cached</i></a>
+      <a href="#" @click.prevent="reload"><i class="material-icons" title="reload">cached</i></a>
     </h2>
     <Robots />
   </div>
@@ -29,7 +29,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['fetchRobots']),
+    ...mapActions(['fetchRobots', 'fetchAliveRobots']),
+
+    async reload() {
+      await this.fetchAliveRobots();
+      await this.fetchRobots();
+    },
   }
 }
 </script>
