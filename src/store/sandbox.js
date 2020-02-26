@@ -5,7 +5,6 @@ function findGroup(state, groupId) {
   return state.groups.find(g => g._id === groupId)
 }
 
-
 const userChangeableAttrs = ['username', 'email'],
   groupChangeableAttrs = ['name'];
 
@@ -40,11 +39,19 @@ export default {
       console.assert(targetGroup, 'group is missing');
       targetGroup.name = group.name;
       targetGroup.users = group.users || [];
+      targetGroup.apiKeys = group.apiKeys || [];
     },
 
-    setGroupUsers(state, payload) {
+    setGroupData(state, payload) {
       const { groupId, users } = payload;
-      findGroup(state, groupId).users = users;
+      const group = findGroup(state, groupId);
+      group.users = users;
+    },
+
+    setGroupAPIKeys(state, payload) {
+      const { groupId, apiKeys } = payload;
+      const group = findGroup(state, groupId);
+      group.apiKeys = apiKeys;
     },
 
     // update a single user
@@ -69,10 +76,25 @@ export default {
 
     addGroupUser(state, user) {
       let group = findGroup(state, user.groupId);
-      if (!group.users) group.users = [];
       group.users.push(user);
     },
 
+    addGroupAPIKey(state, apiKey) {
+      const groupId = apiKey.groups[0];
+      const group = findGroup(state, groupId);
+      console.log('addGroupAPIKey', apiKey);
+      group.apiKeys.push(apiKey);
+    },
+
+    deleteGroupAPIKey(state, keyId) {
+      state.groups.forEach(group => {
+        const index = group.apiKeys.findIndex(key => key._id === keyId);
+        if (index > -1) {
+          console.log('removing key #' + index);
+          group.apiKeys.splice(index, 1);
+        }
+      });
+    },
   },
 
   getters: {
@@ -128,17 +150,23 @@ export default {
       return group;
     },
 
-    async fetchUsers(context, groupId) { // gets group details
+    async fetchGroupMembers(context, groupId) { // gets group details
       if (!groupId || groupId.length !== 24) throw new Error('invalid group id', groupId);
       console.log('fetching users', groupId);
       const endpoint = context.state.SERVER_ADDRESS + `/api/groups/${groupId}/members`
       let { data: users } = await axios.get(endpoint, {
         withCredentials: true,
       })
-      let targetGroup = context.getters.getGroupById(groupId);
-      console.assert(targetGroup.name, 'invalid group');
-      context.commit('setGroupUsers', {groupId, users});
-      return users;
+
+      context.commit('setGroupData', {groupId, users });
+    },
+
+    async fetchGroupAPIKeys(context, groupId) {
+      const apiKeysUrl = `${context.state.SERVER_ADDRESS}/services/keys`
+      const { data: apiKeys } = await axios.get(apiKeysUrl, {
+        withCredentials: true,
+      })
+      context.commit('setGroupAPIKeys', {groupId, apiKeys});
     },
 
     async createUser(context, user) {
@@ -176,6 +204,29 @@ export default {
         withCredentials: true
       })
       context.commit('deleteGroupUser', user);
+      return response.data;
+    },
+
+    async createAPIKey(context, apiKey) {
+      const {provider, value, groups} = apiKey;
+      const endpoint = `${context.state.SERVER_ADDRESS}/services/keys/${provider}`;
+      const options = {withCredentials: true};
+      const response = await axios.post(endpoint, {value, groups}, options);
+      const keyId = response.data;
+      apiKey._id = keyId;
+      console.log('createdKey', apiKey);
+      context.commit('addGroupAPIKey', apiKey);
+      return apiKey;
+    },
+
+    async deleteAPIKey(context, apiKey) {
+      const keyId = apiKey._id;
+      console.log(`deleting API key ${keyId}`);
+      const endpoint = `${context.state.SERVER_ADDRESS}/services/keys/${keyId}`;
+      let response = await axios.delete(endpoint, {
+        withCredentials: true
+      })
+      context.commit('deleteGroupAPIKey', keyId);
       return response.data;
     },
 
