@@ -5,7 +5,8 @@ export default  {
     return {
       group: {
         name: '',
-        users: []
+        users: [],
+        apiKeys: []
       },
     }; // end of data
   },
@@ -16,18 +17,24 @@ export default  {
   },
 
   methods: {
-    ...mapActions(['fetchGroup', 'fetchUsers']),
+    ...mapActions(['fetchGroup', 'fetchGroupMembers', 'fetchGroupAPIKeys']),
 
     // loads group data. assumes that there is such data
-    async loadGroupData(groupId) {
+    async loadGroupMembers(groupId) {
       groupId = groupId || this.groupId || this.id; // backward compatibility
       await this.fetchGroup(groupId);
-      await this.fetchUsers(groupId);
       let group = await this.getGroupById(groupId);
+      await this.fetchGroupMembers(groupId);
       this.group = group;
       return group;
     },
-
+    async loadGroupAPIKeys(groupId) {
+      await this.fetchGroup(groupId);
+      let group = await this.getGroupById(groupId);
+      await this.fetchGroupAPIKeys(groupId);
+      this.group = group;
+      return group;
+    },
   },
 
 };

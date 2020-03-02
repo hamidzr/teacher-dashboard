@@ -82,7 +82,7 @@ export default {
   },
 
   async created() {
-    let group = await this.loadGroupData(this.groupId); // TODO (perf) duplicate fetches on group page
+    let group = await this.loadGroupMembers(this.groupId); // TODO (perf) duplicate fetches on group page
     this.users = group.users;
   },
 
