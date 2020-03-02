@@ -48,6 +48,7 @@
 import APIKeyTableRow from '@/components/APIKeyTableRow.vue'
 import groupMixins from '@/mixins/group'
 import { mapActions } from 'vuex'
+import store from '@/store';
 
 const EmptyAPIKeyData = groupId => ({
     _id: '',
@@ -58,7 +59,8 @@ const EmptyAPIKeyData = groupId => ({
 let API_PROVIDERS = [];
 let API_PROVIDER_NAMES = [];
 (async function setAPIProviders() {
-  const endpoint = `http://localhost:5000/services/keys/providers`;
+  const {SERVER_ADDRESS} = store.state;
+  const endpoint = `${SERVER_ADDRESS}/services/keys/providers`;
   const response = await fetch(endpoint, {credentials: 'include'});
   API_PROVIDERS = await response.json();
 
