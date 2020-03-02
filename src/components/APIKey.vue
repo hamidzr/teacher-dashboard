@@ -82,12 +82,10 @@ export default {
     },
 
     elementId() {
-      console.log(this);
       return '_' + this.apiKey._id;
     },
 
     setValues(keyVals) {
-      console.log('setting values:', keyVals);
       const entries = Object.entries(keyVals);
       for (let i = entries.length; i--;) {
         const [key, value] = entries[i];
