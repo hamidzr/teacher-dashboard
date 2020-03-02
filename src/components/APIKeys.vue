@@ -7,13 +7,13 @@
         <a href="#" v-show="isAddingKey" @click.prevent="toggleAddingKey"><i class="material-icons" title="Cancel">close</i></a>
       </h5>
     </div>
-    <div :style="{ display: display }">
+    <div v-show="isAddingKey">
       <div class="row">
-        <div class="col s6"> <!-- TODO: Get all types from server -->
+        <div class="col s6">
           API Provider:
           <div class="input-field inline">
             <select v-model="newAPIKey.provider">
-                <option v-for="option in providers" :key="option" :value="option">{{ option }}</option>
+                <option v-for="option in apiProviders" :key="option" :value="option">{{ option }}</option>
             </select>
           </div>
         </div>
@@ -54,13 +54,14 @@ const EmptyAPIKeyData = groupId => ({
     value: '',
     groups: [groupId],
 });
-// TODO: Fetch the providers...
-/*
-document.onready = function() {
-    $('select').formSelect();
-};
-*/
-const API_PROVIDERS = null;
+let API_PROVIDERS = [];
+(async function setAPIProviders() {
+  const endpoint = `http://localhost:5000/services/keys/providers`;
+  const response = await fetch(endpoint, {credentials: 'include'});
+  const apiProviders = (await response.json()).map(o => o.provider);
+
+  API_PROVIDERS.splice(0, API_PROVIDERS.length, ...apiProviders);
+})();
 
 export default {
   name: 'apiKeys',
@@ -71,19 +72,20 @@ export default {
       newAPIKey: EmptyAPIKeyData(this.groupId),
       apiKeys: [],
       isAddingKey: false,
+      apiProviders: API_PROVIDERS
     }
   },
   components: {
     APIKeyTableRow,
   },
 
+  updated() {
+    const select = this.$el.querySelectorAll('select');
+    M.FormSelect.init(select);
+  },
   computed: {
     hasKeys() {
       return this.apiKeys.length !== 0;
-    },
-    providers() {
-        console.log('getting providers...');
-        return API_PROVIDERS || ['Google Maps', 'Pixabay'];  // FIXME: Update this
     },
     display() {
         return this.isAddingKey ? 'block' : 'none';
