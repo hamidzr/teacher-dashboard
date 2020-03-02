@@ -1,7 +1,7 @@
 <template>
   <tr :id="elementId()">
-    <td>{{ apiKey.provider }}</td>
-    <td :class="{ editable: editing }" :contenteditable="editing">{{ apiKey.value }}</td>
+    <td class="provider">{{ apiKey.provider }}</td>
+    <td :class="{ editable: editing, value: true }" :contenteditable="editing">{{ apiKey.value }}</td>
     <td>
       <a href="#" v-if="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
       <a href="#" v-if="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a>

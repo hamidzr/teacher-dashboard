@@ -54,6 +54,14 @@ export default {
       group.apiKeys = apiKeys;
     },
 
+    patchGroupAPIKey(state, apiKey) {
+      const [groupId] = apiKey.groups;
+      const { _id, value } = apiKey;
+      let groupKeys = findGroup(state, groupId).apiKeys;
+      let targetKey = groupKeys.find(u => u._id = _id);
+      targetKey.value = value;
+    },
+
     // update a single user
     // payload user should have a groupId
     patchGroupUser(state, user) {
@@ -214,14 +222,22 @@ export default {
       const response = await axios.post(endpoint, {value, groups}, options);
       const keyId = response.data;
       apiKey._id = keyId;
-      console.log('createdKey', apiKey);
       context.commit('addGroupAPIKey', apiKey);
       return apiKey;
     },
 
+    async updateAPIKey(context, apiKey) {
+      const id = apiKey._id;
+      const {value} = apiKey;
+      const endpoint = `${context.state.SERVER_ADDRESS}/services/keys/`;
+      const options = {withCredentials: true};
+      const response = await axios.patch(endpoint, {id, value}, options);
+      context.commit('patchGroupAPIKey', response.data);
+      return response.data;
+    },
+
     async deleteAPIKey(context, apiKey) {
       const keyId = apiKey._id;
-      console.log(`deleting API key ${keyId}`);
       const endpoint = `${context.state.SERVER_ADDRESS}/services/keys/${keyId}`;
       let response = await axios.delete(endpoint, {
         withCredentials: true

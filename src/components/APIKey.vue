@@ -2,11 +2,11 @@
   <div class="inline-inputs" :id="elementId()">
     <div>
       provider:
-      <span class="email" :contenteditable="editing">{{ apiKey.provider }}</span>
+      <span class="provider" :contenteditable="editing">{{ apiKey.provider }}</span>
     </div>
     <div>
       value:
-      <span class="username" :contenteditable="editing">{{ apiKey.value }}</span>
+      <span class="value" :contenteditable="editing">{{ apiKey.value }}</span>
     </div>
     <a href="#" v-if="editing" @click.prevent="save"><i class="material-icons" title="Save">check</i></a>
     <a href="#" v-if="editing" @click.prevent="cancelEditing"><i class="material-icons" title="Cancel">close</i></a>
@@ -29,7 +29,6 @@ export default {
 
   computed: {
     isNewKey() {
-      console.log('isNewKey');
       return this.apiKey._id === undefined;
     },
   },
@@ -60,7 +59,7 @@ export default {
 
     resetFields() {
       this.setValues({
-        email: this.apiKey.email,
+        value: this.apiKey.value,
       });
     },
 
@@ -68,11 +67,11 @@ export default {
       this.toggleEditing();
       try {
         if (this.isNewKey) {
-          let userValues = {...this.apiKey, ...this.readValues(['username', 'email', 'password'])};
-          await this.createUser(userValues);
+          const apiKey = {...this.apiKey, ...this.readValues(['provider', 'value'])};
+          await this.createAPIKey(apiKey);
         } else {
-          let userValues = {...this.apiKey, ...this.readValues(['email'])};
-          await this.updateUser(userValues);
+          const apiKey = {...this.apiKey, ...this.readValues(['value'])};
+          await this.updateAPIKey(apiKey);
         }
       } catch (e) {
         // revert html values back?
@@ -88,8 +87,11 @@ export default {
     },
 
     setValues(keyVals) {
-      for (let key in keyVals) {
-        document.querySelector(`#${this.elementId()} .${key}`).innerText = keyVals[key];
+      console.log('setting values:', keyVals);
+      const entries = Object.entries(keyVals);
+      for (let i = entries.length; i--;) {
+        const [key, value] = entries[i];
+        document.querySelector(`#${this.elementId()} .${key}`).innerText = value;
       }
     },
 

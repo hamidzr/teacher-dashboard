@@ -31,8 +31,6 @@ export default  {
     async loadGroupAPIKeys(groupId) {
       await this.fetchGroup(groupId);
       let group = await this.getGroupById(groupId);
-      console.log('groupId', groupId);
-      console.log('group', group);
       await this.fetchGroupAPIKeys(groupId);
       this.group = group;
       return group;
