@@ -12,10 +12,11 @@
         <div class="col s6">
           API Provider:
           <div class="input-field inline">
-            <select v-model="newAPIKey.provider">
+            <select v-model="newAPIKey.provider" class="newProvider">
                 <option v-for="option in apiProviders" :key="option" :value="option">{{ option }}</option>
             </select>
           </div>
+          <a href="#" @click.prevent="showHelp"><i class="material-icons" title="Getting an API key">help</i></a>
         </div>
         <div class="col s6">
           Key:
@@ -50,17 +51,22 @@ import { mapActions } from 'vuex'
 
 const EmptyAPIKeyData = groupId => ({
     _id: '',
-    provider: '',
+    provider: API_PROVIDER_NAMES[0] || 'Google Maps',
     value: '',
     groups: [groupId],
 });
 let API_PROVIDERS = [];
+let API_PROVIDER_NAMES = [];
 (async function setAPIProviders() {
   const endpoint = `http://localhost:5000/services/keys/providers`;
   const response = await fetch(endpoint, {credentials: 'include'});
-  const apiProviders = (await response.json()).map(o => o.provider);
+  API_PROVIDERS = await response.json();
 
-  API_PROVIDERS.splice(0, API_PROVIDERS.length, ...apiProviders);
+  API_PROVIDER_NAMES.splice(
+    0,
+    API_PROVIDER_NAMES.length,
+    ...API_PROVIDERS.map(o => o.provider)
+  );
 })();
 
 export default {
@@ -72,7 +78,7 @@ export default {
       newAPIKey: EmptyAPIKeyData(this.groupId),
       apiKeys: [],
       isAddingKey: false,
-      apiProviders: API_PROVIDERS
+      apiProviders: API_PROVIDER_NAMES
     }
   },
   components: {
@@ -122,6 +128,17 @@ export default {
         console.error(e.response.data);
         alert(e.response.data);
       }
+    },
+
+    showHelp() {
+      const providerName = this.$el.querySelector('.newProvider').value;
+      const index = API_PROVIDERS.findIndex(provider => provider.provider === providerName);
+      if (index === -1) {
+        console.error(`Could not find help info for ${providerName}`);
+        alert(`Could not find help info for ${providerName}`);
+      }
+      const {url} = API_PROVIDERS[index];
+      window.open(url, '_blank');
     }
   }
 }
