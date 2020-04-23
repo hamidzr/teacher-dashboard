@@ -2,11 +2,11 @@
   <div class="inline-inputs" :id="elementId()">
     <div>
       name:
-      <span class="name" :contenteditable="editing">{{ servicesHost.categories.join('/') }}</span>
+      <span class="name">{{ servicesHost.categories.join('/') }}</span>
     </div>
     <div>
       URL:
-      <span class="url" :contenteditable="editing">{{ servicesHost.url }}</span>
+      <span class="url">{{ servicesHost.url }}</span>
     </div>
     <a href="#" @click.prevent="deleteServicesHostConfirm()"><i class="material-icons" title="Delete">delete</i></a>
   </div>
@@ -20,14 +20,10 @@ export default {
   props: ['servicesHost', 'groupId'],
   data() {
     return {
-      editing: false,
     }
   },
 
   computed: {
-    isNewKey() {
-      return this.servicesHost._id === undefined;
-    },
     name() {
         return this.servicesHost.categories.join('/');
     }
@@ -49,40 +45,9 @@ export default {
       }
     },
 
-    toggleEditing() {
-      this.editing = !this.editing;
-    },
-
-    cancelEditing() {
-      this.resetFields();
-      this.toggleEditing();
-    },
-
-    resetFields() {
-      this.setValues({
-        value: this.servicesHost.value,
-      });
-    },
-
     elementId() {
       return this.name;
     },
-
-    setValues(keyVals) {
-      const entries = Object.entries(keyVals);
-      for (let i = entries.length; i--;) {
-        const [key, value] = entries[i];
-        document.querySelector(`#${this.elementId()} .${key}`).innerText = value;
-      }
-    },
-
-    readValues(keys) {
-      let keyVals = {};
-      keys.forEach(key => {
-        keyVals[key] = document.querySelector(`#${this.elementId()} .${key}`).innerText.trim();
-      });
-      return keyVals;
-    }
   }
 }
 </script>

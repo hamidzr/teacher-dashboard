@@ -91,7 +91,6 @@ export default {
     addGroupAPIKey(state, apiKey) {
       const groupId = apiKey.groups[0];
       const group = findGroup(state, groupId);
-      console.log('addGroupAPIKey', apiKey);
       group.apiKeys.push(apiKey);
     },
 
