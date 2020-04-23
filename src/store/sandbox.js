@@ -40,6 +40,7 @@ export default {
       targetGroup.name = group.name;
       targetGroup.users = group.users || [];
       targetGroup.apiKeys = group.apiKeys || [];
+      targetGroup.servicesHosts = group.servicesHosts || [];
     },
 
     setGroupData(state, payload) {
@@ -103,6 +104,13 @@ export default {
         }
       });
     },
+
+    updateServicesHosts(state, data) {
+      const {groupId, servicesHosts} = data;
+      const group = findGroup(state, groupId);
+      group.servicesHosts = servicesHosts;
+    },
+
   },
 
   getters: {
@@ -213,6 +221,36 @@ export default {
       })
       context.commit('deleteGroupUser', user);
       return response.data;
+    },
+
+    async setServicesHosts(context, data) {
+      const {groupId, servicesHosts} = data;
+      const endpoint = `${context.state.SERVER_ADDRESS}/api/v2/services-hosts/group/${groupId}`;
+      const options = {withCredentials: true};
+      await axios.post(endpoint, servicesHosts, options);
+      context.commit('updateServicesHosts', data);
+    },
+
+    async deleteServicesHost(context, data) {
+      const {groupId, servicesHost} = data;
+      const group = findGroup(context.state, groupId);
+      debugger;
+      const index = group.servicesHosts.findIndex(host => {
+        const sameCategories = servicesHost.categories
+          .reduce((areSame, cat, index) => {
+            return areSame && cat === host.categories[index];
+          }, true);
+        return sameCategories;
+      });
+
+      if (index > -1) {
+        const servicesHosts = group.servicesHosts.slice();
+        servicesHosts.splice(index, 1);
+        const endpoint = `${context.state.SERVER_ADDRESS}/api/v2/services-hosts/group/${groupId}`;
+        const options = {withCredentials: true};
+        await axios.post(endpoint, servicesHosts, options);
+        context.commit('updateServicesHosts', {groupId, servicesHosts});
+      }
     },
 
     async createAPIKey(context, apiKey) {

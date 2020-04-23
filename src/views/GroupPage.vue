@@ -8,8 +8,9 @@
       <a href="#" v-else @click.prevent="toggleEditing"><i class="material-icons" title="Edit">edit</i></a>
       <!-- <router-link :to="{name: 'groupEdit', params: {id: id}}"><i class="material-icons">edit</i></router-link> -->
     </h3>
-    <APIKeys :groupId="id" :keys="group.apiKeys" />
     <Users :groupId="id" :users="group.users" />
+    <APIKeys :groupId="id" :keys="group.apiKeys" />
+    <ServicesHosts :groupId="id" :keys="group.servicesHosts" />
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import groupMixin from '@/mixins/group'
 import { mapActions } from 'vuex'
 import Users from '@/components/Users.vue'
 import APIKeys from '@/components/APIKeys.vue'
+import ServicesHosts from '@/components/ServicesHosts.vue'
 
 
 export default {
@@ -27,6 +29,7 @@ export default {
   components: {
     Users,
     APIKeys,
+    ServicesHosts,
   },
   data() {
     return {
