@@ -233,7 +233,6 @@ export default {
     async deleteServicesHost(context, data) {
       const {groupId, servicesHost} = data;
       const group = findGroup(context.state, groupId);
-      debugger;
       const index = group.servicesHosts.findIndex(host => {
         const sameCategories = servicesHost.categories
           .reduce((areSame, cat, index) => {
