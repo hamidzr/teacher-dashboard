@@ -107,7 +107,7 @@ export default {
     updateServicesHosts(state, data) {
       const {groupId, servicesHosts} = data;
       const group = findGroup(state, groupId);
-      group.servicesHosts = servicesHosts;
+      group.servicesHosts.splice(0, group.servicesHosts.length, ...servicesHosts)
     },
 
   },
