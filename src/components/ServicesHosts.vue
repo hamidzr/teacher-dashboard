@@ -2,9 +2,11 @@
   <div>
     <div>
       <!-- search bar and user creation bar -->
-      <h5>Additional Services: <a href="#" v-show="!isAddingHost" @click.prevent="toggleAddingHost" title="Register additional services hosts for the group">+</a>
-        <a href="#" v-show="isAddingHost" @click.prevent="addHost"><i class="material-icons" title="Register additional services URL">check</i></a>
-        <a href="#" v-show="isAddingHost" @click.prevent="toggleAddingHost"><i class="material-icons" title="Cancel">close</i></a>
+        
+      <h5>Additional Services: <!--<a href="#" @click.prevent="showHelp"><i class="material-icons" style="font-size: 20px; margin-right: 5px; vertical-align: middle;" title="More information...">info_outline</i></a>-->
+        <a href="#" v-show="!isAddingHost" @click.prevent="toggleAddingHost" title="Register additional services hosts for the group" style="vertical-align: middle">+</a>
+        <a href="#" v-show="isAddingHost" @click.prevent="addHost"><i class="material-icons" title="Register additional services URL" style="vertical-align: middle">check</i></a>
+        <a href="#" v-show="isAddingHost" @click.prevent="toggleAddingHost"><i class="material-icons" title="Cancel" style="vertical-align: middle">close</i></a>
       </h5>
     </div>
     <div v-show="isAddingHost">
@@ -109,6 +111,10 @@ export default {
         alert(e.response.data);
       }
     },
+
+    async showHelp() {
+      // TODO: Should I write this up on the community forum? On a blog? Open a modal?
+    }
   }
 }
 </script>
