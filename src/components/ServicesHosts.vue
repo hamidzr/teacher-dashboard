@@ -43,7 +43,6 @@
 </template>
 
 <script>
-/* globals M */
 import ServicesHostTableRow from '@/components/ServicesHostTableRow.vue'
 import groupMixins from '@/mixins/group'
 import { mapActions } from 'vuex'
@@ -75,11 +74,6 @@ export default {
     display() {
         return this.isAddingHost ? 'block' : 'none';
     },
-  },
-
-  mounted: function() {
-    const select = this.$el.querySelectorAll('select');
-    M.FormSelect.init(select);
   },
 
   async created() {
