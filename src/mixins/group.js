@@ -6,7 +6,8 @@ export default  {
       group: {
         name: '',
         users: [],
-        apiKeys: []
+        apiKeys: [],
+        servicesHosts: []
       },
     }; // end of data
   },
@@ -18,6 +19,13 @@ export default  {
 
   methods: {
     ...mapActions(['fetchGroup', 'fetchGroupMembers', 'fetchGroupAPIKeys']),
+
+    async loadGroup(groupId) {
+      groupId = groupId || this.groupId || this.id; // backward compatibility
+      await this.fetchGroup(groupId);
+      this.group = await this.getGroupById(groupId);
+      return this.group;
+    },
 
     // loads group data. assumes that there is such data
     async loadGroupMembers(groupId) {
