@@ -9,9 +9,13 @@
     export let group;
 </script>
 
-<ApiKeysList {group} />
+<div>
+    <ApiKeysList {group} />
+</div>
 
-<UsersList {group} />
+<div>
+    <UsersList {group} />
+</div>
 
 <Button
     on:click={() => {
