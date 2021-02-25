@@ -11,6 +11,7 @@
     export let group;
 
     let renameDialog;
+    let deleteDialog;
     let newName: string = '';
     let newNameValid = false;
 
@@ -39,6 +40,27 @@
         </Actions>
     </Dialog>
 
+    <Dialog bind:this={deleteDialog}>
+        <Title id="simple-title">Confirm Deletion</Title>
+
+        <Content id="simple-content">
+            Are you sure you want to delete {group.name}?
+        </Content>
+        <Actions>
+            <Button
+                on:click={() => {
+                    deleteGroup(group._id);
+                    deleteDialog.close();
+                }}
+            >
+                <Label>Delete</Label>
+            </Button>
+            <Button on:click={() => deleteDialog.close()}>
+                <Label>Cancel</Label>
+            </Button>
+        </Actions>
+    </Dialog>
+
     <Card style="width: 320px;">
         <Content>{group.name}</Content>
         <Actions>
@@ -53,7 +75,7 @@
             >
                 <Label>Rename</Label>
             </Button>
-            <Button on:click={() => deleteGroup(group._id)}>
+            <Button on:click={() => deleteDialog.open()}>
                 <Label>Delete</Label>
             </Button>
         </Actions>
