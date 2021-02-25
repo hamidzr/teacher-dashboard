@@ -3,6 +3,7 @@
     import Button, { Label } from '@smui/button';
     import IconButton, { Icon } from '@smui/icon-button';
     import List, { Item, Text } from '@smui/list';
+    import { deleteGroup } from '../stores/groups';
 
     export let group;
 </script>

@@ -4,10 +4,21 @@
     import GroupCard from './GroupCard.svelte';
 </script>
 
-{#if $groups.length == 0}
-    Add a group to see it here.
-{:else}
-    {#each $groups as group}
-        <GroupCard {group} />
-    {/each}
-{/if}
+<div id="cards">
+    {#if $groups.length == 0}
+        Add a group to see it here.
+    {:else}
+        {#each $groups as group}
+            <GroupCard {group} />
+        {/each}
+    {/if}
+</div>
+
+<style>
+    #cards {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+</style>

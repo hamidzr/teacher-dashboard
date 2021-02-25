@@ -11,7 +11,9 @@ const updateGroups = async () => {
 
 const createGroup = async (name) => {
     console.log('creating group', name);
-    let response = await (await fetch(process.env.SERVER + '/api/groups', { method: 'POST', credentials: 'include', body: JSON.stringify({name: name})})).text();
+    let response = await (await fetch(process.env.SERVER + '/api/groups', { method: 'POST', credentials: 'include', headers: {
+        "Content-type": "application/json"
+      },  body: JSON.stringify({name: name})})).text();
     
     console.log(response);
     /*if(){
@@ -19,7 +21,18 @@ const createGroup = async (name) => {
     }*/
 
     updateGroups();
-    return group;
 };
 
-export {groups, updateGroups, createGroup};
+const deleteGroup = async (id) => {
+    console.log('creating group', name);
+    let response = await (await fetch(process.env.SERVER + '/api/groups/' + id, { method: 'DELETE', credentials: 'include'})).text();
+    
+    console.log(response);
+    /*if(){
+        throw Error('malformed group response');
+    }*/
+
+    updateGroups();
+};
+
+export {groups, updateGroups, createGroup, deleteGroup};
