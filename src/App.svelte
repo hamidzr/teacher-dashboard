@@ -79,18 +79,6 @@
             icon: loginIcon,
             label: loginText,
             requiresLogin: false,
-            handleSpecific: () => {
-                if (!$loggedIn) {
-                    // Redirect to login form
-                    let destination = location.href;
-                    location.href = `https://login.netsblox.org?url=${process.env.SERVER}&redirect=${destination}`;
-                } else {
-                    // Send logout request
-                    self.fetch(process.env.SERVER + '/api/logout', { method: 'POST', credentials: 'include' });
-                    activeTab = tabs[0];
-                    checkForLogin();
-                }
-            },
         },
     ];
 
@@ -108,18 +96,7 @@
         <nav>
             <div id="tabbar">
                 <TabBar {tabs} let:tab key={(tab) => tab.k} bind:active={activeTab}>
-                    <Tab
-                        {tab}
-                        stacked={true}
-                        indicatorSpanOnlyContent={true}
-                        tabIndicator$transition="fade"
-                        disabled={tab.requiresLogin && !$loggedIn}
-                        on:click={() => {
-                            if (activeTab.handleSpecific != undefined) {
-                                activeTab.handleSpecific();
-                            }
-                        }}
-                    >
+                    <Tab {tab} stacked={true} indicatorSpanOnlyContent={true} tabIndicator$transition="fade" disabled={tab.requiresLogin && !$loggedIn}>
                         <Icon class="material-icons">{tab.icon}</Icon>
                         <Label>{tab.label}</Label>
                     </Tab>
