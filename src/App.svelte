@@ -5,6 +5,7 @@
     import Tab, { Icon, Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
     import Footer from './components/Footer.svelte';
+    import Snackbar, { Actions } from '@smui/snackbar';
     import { onMount } from 'svelte';
 
     import Home from './routes/Home.svelte';
@@ -13,18 +14,22 @@
     import RoboScape from './routes/RoboScape.svelte';
     import Login from './routes/Login.svelte';
     import { groups, updateGroups } from './stores/groups';
+    import { message } from './stores/message';
+    import { loggedIn } from './stores/loggedIn';
 
     async function checkForLogin() {
-        const previousState = loggedIn;
-        let apiRes = await self.fetch(process.env.SERVER + '/api', { credentials: 'include' });
-        loggedIn = (await apiRes.text()) !== 'No session found';
+        try {
+            const previousState = $loggedIn;
+            let apiRes = await self.fetch(process.env.SERVER + '/api', { credentials: 'include' });
+            $loggedIn = (await apiRes.text()) !== 'No session found';
 
-        if (loggedIn && !previousState) {
-            updateGroups();
+            if ($loggedIn && !previousState) {
+                updateGroups();
+            }
+        } catch (error) {
+            $message = 'Failed to connect to server';
         }
     }
-
-    let loggedIn = false;
 
     onMount(async () => {
         await checkForLogin();
@@ -32,12 +37,12 @@
 
     let loginText = 'Login';
     let loginIcon = 'login';
-    $: loginIcon = loggedIn ? 'logout' : 'login';
-    $: loginText = loggedIn ? 'Logout' : 'Login';
+    $: loginIcon = $loggedIn ? 'logout' : 'login';
+    $: loginText = $loggedIn ? 'Logout' : 'Login';
 
     // Check for login on occasion
     setInterval(() => {
-        if (!loggedIn) {
+        if (!$loggedIn) {
             checkForLogin();
         }
     }, 5000);
@@ -73,7 +78,7 @@
             label: loginText,
             requiresLogin: false,
             handleSpecific: () => {
-                if (!loggedIn) {
+                if (!$loggedIn) {
                     // Redirect to login form
                     let destination = location.href;
                     location.href = `https://login.netsblox.org?url=${process.env.SERVER}&redirect=${destination}`;
@@ -92,6 +97,8 @@
 
     let activeTab = tabs[0];
     let menu;
+    let snackbar;
+    $: if ($message != '') snackbar.open();
 </script>
 
 <div id="container">
@@ -104,7 +111,7 @@
                         stacked={true}
                         indicatorSpanOnlyContent={true}
                         tabIndicator$transition="fade"
-                        disabled={tab.requiresLogin && !loggedIn}
+                        disabled={tab.requiresLogin && !$loggedIn}
                         on:click={() => {
                             if (activeTab.handleSpecific != undefined) {
                                 activeTab.handleSpecific();
@@ -122,11 +129,7 @@
                         <Section>
                             <div id="menubutton">
                                 <IconButton class="material-icons" on:click={() => menu.setOpen(true)}>menu</IconButton>
-                                {#if loggedIn}
-                                    <MobileMenuBar {tabs} bind:activeTab loggedIn="true" bind:menu />
-                                {:else}
-                                    <MobileMenuBar {tabs} bind:activeTab loggedIn="false" bind:menu />
-                                {/if}
+                                <MobileMenuBar {tabs} bind:activeTab bind:menu />
                             </div>
                             <Title>NetsBlox Dashboard</Title>
                         </Section>
@@ -153,6 +156,13 @@
     <footer>
         <Footer />
     </footer>
+
+    <Snackbar bind:this={snackbar}>
+        <Label>{$message}</Label>
+        <Actions>
+            <IconButton class="material-icons" title="Dismiss">close</IconButton>
+        </Actions>
+    </Snackbar>
 </div>
 
 <style>

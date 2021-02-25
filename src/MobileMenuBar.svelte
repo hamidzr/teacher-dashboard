@@ -1,8 +1,8 @@
 <script lang="ts">
     import Menu from '@smui/menu';
     import List, { Item, Separator, Text, Graphic } from '@smui/list';
+    import { loggedIn } from './stores/loggedIn';
 
-    export let loggedIn;
     export let tabs: any[];
     export let activeTab;
     export let menu;
@@ -19,7 +19,7 @@
                         activeTab = tab;
                     }
                 }}
-                disabled={tabs[index].requiresLogin && !(loggedIn === 'true')}
+                disabled={tabs[index].requiresLogin && !($loggedIn === true)}
                 activated={tabs[index].k == (activeTab?.k ?? 1)}
             >
                 <Graphic class="material-icons">{tabs[index].icon}</Graphic>
