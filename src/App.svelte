@@ -1,8 +1,5 @@
 <script lang="ts">
     import MobileMenuBar from './MobileMenuBar.svelte';
-
-    let server = process.env.SERVER ?? 'https://editor.netsblox.org';
-
     import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
     import IconButton from '@smui/icon-button';
     import Tab, { Icon, Label } from '@smui/tab';
@@ -15,10 +12,16 @@
     import Groups from './routes/Groups.svelte';
     import RoboScape from './routes/RoboScape.svelte';
     import Login from './routes/Login.svelte';
+    import { groups, updateGroups } from './stores/groups';
 
     async function checkForLogin() {
-        let apiRes = await self.fetch(server + '/api', { credentials: 'include' });
+        const previousState = loggedIn;
+        let apiRes = await self.fetch(process.env.SERVER + '/api', { credentials: 'include' });
         loggedIn = (await apiRes.text()) !== 'No session found';
+
+        if (loggedIn && !previousState) {
+            updateGroups();
+        }
     }
 
     let loggedIn = false;
@@ -73,10 +76,10 @@
                 if (!loggedIn) {
                     // Redirect to login form
                     let destination = location.href;
-                    location.href = `https://login.netsblox.org?url=${server}&redirect=${destination}`;
+                    location.href = `https://login.netsblox.org?url=${process.env.SERVER}&redirect=${destination}`;
                 } else {
                     // Send logout request
-                    self.fetch(server + '/api/logout', { method: 'POST', credentials: 'include' });
+                    self.fetch(process.env.SERVER + '/api/logout', { method: 'POST', credentials: 'include' });
                     activeTab = tabs[0];
                     checkForLogin();
                 }
@@ -135,7 +138,7 @@
 
     <main>
         {#if activeTab == null || activeTab.k == 1}
-            <Home {server} />
+            <Home />
         {:else if activeTab.k == 2}
             <Groups />
         {:else if activeTab.k == 3}
