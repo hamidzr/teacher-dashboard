@@ -9,7 +9,7 @@
         Add a group to see it here.
     {:else}
         {#each $groups as group}
-            <GroupCard {group} />
+            <GroupCard {group} on:beginEdit />
         {/each}
     {/if}
 </div>

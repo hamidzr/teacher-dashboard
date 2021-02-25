@@ -1,12 +1,10 @@
 <script lang="ts">
-    import Card, { Content, PrimaryAction, Media, MediaContent, Actions, ActionButtons, ActionIcons } from '@smui/card';
+    import Card, { Content, Actions } from '@smui/card';
     import Button, { Label } from '@smui/button';
-    import IconButton, { Icon } from '@smui/icon-button';
-    import List, { Item, Text } from '@smui/list';
-    import Dialog, { Title, Content as DialogContent, Actions as DialogActions, InitialFocus } from '@smui/dialog';
+    import Dialog, { Title, Content as DialogContent, Actions as DialogActions } from '@smui/dialog';
     import Textfield from '@smui/textfield';
-    import HelperText from '@smui/textfield/helper-text/index';
     import { deleteGroup, renameGroup } from '../stores/groups';
+    import { createEventDispatcher } from 'svelte';
 
     export let group;
 
@@ -16,6 +14,8 @@
     let newNameValid = false;
 
     $: newNameValid = newName.trim().length > 0;
+
+    let dispatcher = createEventDispatcher();
 </script>
 
 <div class="card-container short">
@@ -64,7 +64,7 @@
     <Card style="width: 320px;">
         <Content>{group.name}</Content>
         <Actions>
-            <Button on:click={() => editGroup(group._id)}>
+            <Button on:click={() => dispatcher('beginEdit', group)}>
                 <Label>Edit</Label>
             </Button>
             <Button

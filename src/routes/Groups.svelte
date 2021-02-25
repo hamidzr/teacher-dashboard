@@ -1,12 +1,15 @@
 <script>
     import Fab, { Label, Icon } from '@smui/fab';
     import { onMount } from 'svelte';
+    import GroupForm from '../components/GroupForm.svelte';
     import GroupsList from '../components/GroupsList.svelte';
     import { createGroup, refreshGroups } from '../stores/groups';
 
     onMount(async () => {
         await refreshGroups();
     });
+
+    let editing = null;
 </script>
 
 <h2>
@@ -18,4 +21,17 @@
     >
 </h2>
 
-<GroupsList />
+{#if editing == null}
+    <GroupsList
+        on:beginEdit={(group) => {
+            editing = group;
+        }}
+    />
+{:else}
+    <GroupForm
+        group={editing}
+        on:finishEdit={() => {
+            editing = null;
+        }}
+    />
+{/if}
