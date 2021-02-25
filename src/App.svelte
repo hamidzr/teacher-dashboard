@@ -13,7 +13,7 @@
     import Groups from './routes/Groups.svelte';
     import RoboScape from './routes/RoboScape.svelte';
     import Login from './routes/Login.svelte';
-    import { groups, updateGroups } from './stores/groups';
+    import { refreshGroups } from './stores/groups';
     import { message } from './stores/message';
     import { loggedIn } from './stores/loggedIn';
 
@@ -24,8 +24,10 @@
             $loggedIn = (await apiRes.text()) !== 'No session found';
 
             if ($loggedIn && !previousState) {
-                updateGroups();
+                refreshGroups();
             }
+
+            $message = '';
         } catch (error) {
             $message = 'Failed to connect to server';
         }
@@ -160,7 +162,13 @@
     <Snackbar bind:this={snackbar}>
         <Label>{$message}</Label>
         <Actions>
-            <IconButton class="material-icons" title="Dismiss">close</IconButton>
+            <IconButton
+                class="material-icons"
+                title="Dismiss"
+                on:click={() => {
+                    $message = '';
+                }}>close</IconButton
+            >
         </Actions>
     </Snackbar>
 </div>

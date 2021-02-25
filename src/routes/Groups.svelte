@@ -2,10 +2,10 @@
     import Fab, { Label, Icon } from '@smui/fab';
     import { onMount } from 'svelte';
     import GroupsList from '../components/GroupsList.svelte';
-    import { createGroup, updateGroups } from '../stores/groups';
+    import { createGroup, refreshGroups } from '../stores/groups';
 
     onMount(async () => {
-        await updateGroups();
+        await refreshGroups();
     });
 </script>
 
