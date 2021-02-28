@@ -15,5 +15,17 @@ const refreshRobots = async () => {
     }
 };
 
+const updateRobot = async (robot) => {
+    if(get(loggedIn)){
+        await fetch(process.env.SERVER + '/api/roboscape/robots/' + robot._id, {
+            method: 'POST',
+            credentials: 'include', 
+            headers: {
+                "Content-type": "application/json"
+            },  
+            body: JSON.stringify(robot)
+         });
+    }
+}
 
-export { robots, refreshRobots }
+export { robots, refreshRobots, updateRobot }
