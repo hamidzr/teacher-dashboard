@@ -1,1 +1,7 @@
-<h2>Your Robots</h2>
+<script>
+    import RobotsList from '../components/RobotsList.svelte';
+
+    let editing = null;
+</script>
+
+<RobotsList />
