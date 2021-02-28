@@ -79,7 +79,7 @@
                 }}
             >
                 <Label>Modify</Label>
-            </Button>
+            </Button> <br />
             <Button on:click={() => deleteDialog.open()}>
                 <Label>Delete</Label>
             </Button>

@@ -69,3 +69,13 @@ button:focus {
 button:disabled span span {
     color: #ccc !important;
 }
+
+@media (max-width: 640px) {
+    .mdc-data-table {
+        width: 100%;
+    }
+
+    .mdc-data-table__table {
+        width: 100%;
+    }
+}
