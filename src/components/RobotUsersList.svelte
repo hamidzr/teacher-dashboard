@@ -2,7 +2,8 @@
     import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Button, { Label } from '@smui/button';
-    import { getRobot, removeRobotUser } from '../stores/roboscape';
+    import Checkbox from '@smui/checkbox';
+    import { getRobot, removeRobotUser, updateUser } from '../stores/roboscape';
 
     export let robot;
     let deleteDialog;
@@ -47,7 +48,14 @@
         {#each robot.users as user (user._id)}
             <Row>
                 <Cell>{user.username}</Cell>
-                <Cell>{user.hasAccess}</Cell>
+                <Cell>
+                    <Checkbox
+                        bind:checked={user.hasAccess}
+                        on:change={(e) => {
+                            updateUser(robot._id, user);
+                        }}
+                    />
+                </Cell>
                 <!--<Cell>{user.updatedAt}</Cell>-->
                 <Cell>
                     <Button

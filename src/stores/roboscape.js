@@ -107,4 +107,17 @@ const setPublic = async (id, isPublic) => {
     }
 }
 
-export { robots, refreshRobots, updateRobot, addRobotUsers, getRobot, removeRobotUser, setPublic }
+const updateUser = async (robotId, user) => {
+    if(get(loggedIn)){
+        await fetch(process.env.SERVER + '/api/roboscape/robots/' + robotId + '/users', {
+            method: 'PUT',
+            credentials: 'include', 
+            headers: {
+                "Content-type": "application/json"
+            },  
+            body: JSON.stringify(user)
+        });
+    }
+}
+
+export { robots, refreshRobots, updateRobot, addRobotUsers, getRobot, removeRobotUser, setPublic, updateUser}
