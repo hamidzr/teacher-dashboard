@@ -100,7 +100,10 @@ const removeRobotUser = async (id, userID) => {
  */
 const setPublic = async (id, isPublic) => {
     if(get(loggedIn)){
-
+        await updateRobot({
+            _id: id,
+            isPublic
+        });
     }
 }
 

@@ -7,7 +7,7 @@
     import RobotUsersList from './RobotUsersList.svelte';
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Textfield from '@smui/textfield';
-    import { addRobotUsers, getRobot } from '../stores/roboscape';
+    import { addRobotUsers, getRobot, setPublic } from '../stores/roboscape';
 
     let dispatch = createEventDispatcher();
 
@@ -15,12 +15,15 @@
 
     let newDialog;
     let newUsers = '';
+    let isPublic = robot.isPublic;
+
+    $: setPublic(robot._id, isPublic);
 </script>
 
 <div>
     <FormField align="end">
         <span slot="label">Public:</span>
-        <Checkbox bind:checked={robot.isPublic} />
+        <Checkbox bind:checked={isPublic} />
     </FormField>
 </div>
 
