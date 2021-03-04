@@ -16,7 +16,7 @@
         Editing {editing.robotId}
     </h2>
     <RobotForm
-        group={editing}
+        robot={editing}
         on:finishEdit={() => {
             editing = null;
         }}
