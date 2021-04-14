@@ -1,6 +1,6 @@
 <script lang="ts">
     export let user;
-    import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
+    import { Row, Cell } from '@smui/data-table';
     import Button, { Label } from '@smui/button';
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Textfield from '@smui/textfield';

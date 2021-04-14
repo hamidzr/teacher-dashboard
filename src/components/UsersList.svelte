@@ -3,7 +3,6 @@
     import Fab, { Icon } from '@smui/fab';
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Button, { Label } from '@smui/button';
-    import Select, { Option } from '@smui/select';
     import Textfield from '@smui/textfield';
     import UserListItem from './UserListItem.svelte';
     import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';

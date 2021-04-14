@@ -1,5 +1,5 @@
 <script lang="ts">
-    import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
+    import { Row, Cell } from '@smui/data-table';
     export let key;
 </script>
 

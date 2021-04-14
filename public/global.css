@@ -70,6 +70,11 @@ button:disabled span span {
     color: #ccc !important;
 }
 
+.mdc-card {
+    background: #f6f5f0;
+    background-color: #f6f5f0 !important;
+}
+
 @media (max-width: 640px) {
     .mdc-data-table {
         width: 100%;

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button, { Label } from '@smui/button';
+    import Button from '@smui/button';
     import { createEventDispatcher } from 'svelte';
     import ApiKeysList from './APIKeysList.svelte';
     import UsersList from './UsersList.svelte';

@@ -17,24 +17,56 @@
     import { message } from './stores/message';
     import { loggedIn } from './stores/loggedIn';
 
-    async function checkForLogin() {
-        try {
-            const previousState = $loggedIn;
-            let apiRes = await self.fetch(process.env.SERVER + '/api', { credentials: 'include' });
-            $loggedIn = (await apiRes.text()) !== 'No session found';
+    // Request the login status of the user
+    function checkForLogin() {
+        return new Promise(async (resolve) => {
+            try {
+                const previousState = $loggedIn;
+                let apiRes = await self.fetch(process.env.SERVER + '/api', { credentials: 'include' });
+                $loggedIn = (await apiRes.text()) !== 'No session found';
 
-            if ($loggedIn && !previousState) {
-                refreshGroups();
+                if ($loggedIn && !previousState) {
+                    refreshGroups();
+                }
+
+                $message = '';
+
+                resolve($loggedIn);
+            } catch (error) {
+                $message = 'Failed to connect to server';
+                resolve(false);
             }
+        });
+    }
 
-            $message = '';
-        } catch (error) {
-            $message = 'Failed to connect to server';
+    // Navigate to the tab in the URL's hash
+    function navigateByHash() {
+        let navTab = tabs.find((tab) => tab.label.toLocaleLowerCase() == window.location.hash.substr(1));
+        if (navTab != undefined) {
+            if (!navTab.requiresLogin || $loggedIn) {
+                activeTab = navTab;
+            }
         }
     }
 
+    // Adds the active tab to the browser history
+    function pushTab() {
+        if (readHashTab) {
+            let newHash = '#' + activeTab.label.toLocaleLowerCase();
+
+            if (history.state != activeTab.label) {
+                history.pushState(activeTab.label, 'NetsBlox Dashboard', newHash);
+            }
+        }
+    }
+
+    let readHashTab = false;
     onMount(async () => {
         await checkForLogin();
+
+        // Auto-navigate to tab if in URL
+        navigateByHash();
+        readHashTab = true;
     });
 
     let loginText = 'Login';
@@ -49,6 +81,7 @@
         }
     }, 5000);
 
+    // List of available tabs
     let tabs = [
         {
             k: 1,
@@ -88,7 +121,20 @@
     let activeTab = tabs[0];
     let menu;
     let snackbar;
+
     $: if ($message != '') snackbar.open();
+
+    // Update history with tab
+    $: activeTab && pushTab();
+
+    window.onhashchange = function () {
+        // If user changed active tab by hitting back
+        if (window.location.hash.substr(1) != activeTab.label.toLocaleLowerCase()) {
+            readHashTab = false;
+            navigateByHash();
+            readHashTab = true;
+        }
+    };
 </script>
 
 <div id="container">
