@@ -1,8 +1,7 @@
 <script lang="ts">
     import Fab, { Icon } from '@smui/fab';
     import { onMount } from 'svelte';
-    import { createGroup, refreshGroups } from '../stores/groups';
-    import { groups } from '../stores/groups';
+    import { createGroup, refreshGroups, groups } from '../stores/groups';
 
     import GroupCard from './GroupCard.svelte';
 

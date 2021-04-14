@@ -1,13 +1,12 @@
 <script lang="ts">
     import Fab, { Icon } from '@smui/fab';
     import ApiKeyListItem from './APIKeyListItem.svelte';
-    import List from '@smui/list';
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Button, { Label } from '@smui/button';
     import Select, { Option } from '@smui/select';
     import Textfield from '@smui/textfield';
     import { onMount } from 'svelte';
-    import { getAPIKeys } from '../stores/groups';
+    import { refreshAPIKeys, addNewKey, apiKeys, groups } from '../stores/groups';
     import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
 
     export let group;
@@ -22,8 +21,8 @@
         // Load API providers
         const response = await fetch(process.env.SERVER + `/services/keys/providers`, { credentials: 'include' });
         providers = await response.json();
-        // Load API keys
-        keys = await getAPIKeys(group._id);
+        // Load API keys 
+        await refreshAPIKeys();
     });
 </script>
 
@@ -42,7 +41,19 @@
         <Textfield fullwidth bind:value={newKey} label="Key" input$aria-controls="helper-text-standard-a" input$aria-describedby="helper-text-standard-a" />
     </Content>
     <Actions>
-        <Button on:click={() => {}} disabled={newKey.length < 1}>
+        <Button on:click={async () => 
+        {
+            if(await addNewKey({
+                value: newKey,
+                provider: newProvider,
+                groups: [
+                    group._id
+                ]
+            })) { 
+                newDialog.close();
+            }
+        }} 
+            disabled={newKey.length < 1}>
             <Label>Submit</Label>
         </Button>
         <Button on:click={() => {}}>
@@ -69,8 +80,10 @@
         </Row>
     </Head>
     <Body>
-        {#each keys as key}
-            <ApiKeyListItem {key} />
+        {#each $apiKeys as key}
+            {#if key.groups.indexOf(group._id) > -1}
+                <ApiKeyListItem {key} />
+            {/if}
         {/each}
     </Body>
 </DataTable>
