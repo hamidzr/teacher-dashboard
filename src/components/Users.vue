@@ -6,7 +6,7 @@
         <a style="position: relative"
             href="#" v-show="!isAddingUser"
             @click.prevent="uploadCSV"
-            title="Create members from CSV&#010;(columns: username,email,password)">
+            title="Create members from CSV &#010;(columns: username,email,password)">
             <i style="top: 2px; position: absolute;" class="material-icons" >arrow_circle_up</i>
         </a>
         <a href="#" v-show="isAddingUser" @click.prevent="addUser"><i class="material-icons" title="Save user">check</i></a>
