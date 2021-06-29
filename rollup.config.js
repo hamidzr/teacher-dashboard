@@ -44,7 +44,7 @@ export default {
 	},
 	plugins: [
 		replace({
-			'process.env.SERVER': `"${process.env.SERVER || 'https://editor.netsblox.org'}"`,
+			'process.env.SERVER': `"${process.env.SERVER || 'http://localhost:8080'}"`,
 		}),
 		svelte({
 			emitCss: true,

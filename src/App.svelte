@@ -1,6 +1,7 @@
 <script lang="ts">
     import MobileMenuBar from './MobileMenuBar.svelte';
     import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
+    import { toasts, ToastContainer, FlatToast }  from "svelte-toasts";
     import IconButton from '@smui/icon-button';
     import Tab, { Icon, Label } from '@smui/tab';
     import TabBar from '@smui/tab-bar';
@@ -11,7 +12,7 @@
     import Home from './routes/Home.svelte';
     import Help from './routes/Help.svelte';
     import Groups from './routes/Groups.svelte';
-    import RoboScape from './routes/RoboScape.svelte';
+    import Services from './routes/Services.svelte';
     import Login from './routes/Login.svelte';
     import { refreshGroups } from './stores/groups';
     import { message } from './stores/message';
@@ -64,6 +65,24 @@
     onMount(async () => {
         await checkForLogin();
 
+        window.onunhandledrejection = (e) => 
+        {
+
+            const showToast = () => {
+                toasts.add({
+                title: 'Message',
+                description: e.reason,
+                duration: 4000, 
+                placement: 'center-center',
+                type: 'error',
+                theme: 'dark',
+                onClick: () => {},
+                onRemove: () => {},
+            })};
+
+            showToast();
+        }
+
         // Auto-navigate to tab if in URL
         navigateByHash();
         readHashTab = true;
@@ -98,7 +117,7 @@
         {
             k: 3,
             icon: 'android',
-            label: 'RoboScape',
+            label: 'Services',
             requiresLogin: true,
         },
         {
@@ -170,7 +189,7 @@
         {:else if activeTab.k == 2}
             <Groups />
         {:else if activeTab.k == 3}
-            <RoboScape />
+            <Services />
         {:else if activeTab.k == 4}
             <Help />
         {:else if activeTab.k == 5}
@@ -181,6 +200,10 @@
     <footer>
         <Footer />
     </footer>
+
+    <ToastContainer placement="center-center" let:data={data}>
+        <FlatToast {data} /> 
+    </ToastContainer>
 
     <Snackbar bind:this={snackbar}>
         <Label>{$message}</Label>

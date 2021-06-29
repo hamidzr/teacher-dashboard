@@ -40,14 +40,20 @@ const updateRobot = async (robot) => {
     delete newRobot.ownedAt;
 
     if(get(loggedIn)){
-        await fetch(process.env.SERVER + '/api/roboscape/robots/' + robot._id, {
-            method: 'PATCH',
-            credentials: 'include', 
-            headers: {
-                "Content-type": "application/json"
-            },  
-            body: JSON.stringify(newRobot)
-         });
+        try
+        {
+            await fetch(process.env.SERVER + '/api/roboscape/robots/' + robot._id, {
+                method: 'PATCH',
+                credentials: 'include', 
+                headers: {
+                    "Content-type": "application/json"
+                },  
+                body: JSON.stringify(newRobot)
+            });
+        } catch (err) {
+            throw new Error(`Update robot error: ${err}`);
+        }
+        
          await refreshRobots();
     }
 }
@@ -64,14 +70,19 @@ const addRobotUsers = async (id, newUsers) => {
         }
 
         for(let user of newUsers) {
-            await fetch(process.env.SERVER + '/api/roboscape/robots/' + id + '/users', {
-                method: 'PUT',
-                credentials: 'include', 
-                headers: {
-                    "Content-type": "application/json"
-                },  
-                body: JSON.stringify({username: user, hasAccess: true})
-            });
+            try
+            {
+                await fetch(process.env.SERVER + '/api/roboscape/robots/' + id + '/users', {
+                    method: 'PUT',
+                    credentials: 'include', 
+                    headers: {
+                        "Content-type": "application/json"
+                    },  
+                    body: JSON.stringify({username: user, hasAccess: true})
+                });
+            } catch (err) {
+                throw new Error(`Add robot user error: ${err}`);
+            }
         };
         
         await refreshRobots();
@@ -109,14 +120,19 @@ const setPublic = async (id, isPublic) => {
 
 const updateUser = async (robotId, user) => {
     if(get(loggedIn)){
-        await fetch(process.env.SERVER + '/api/roboscape/robots/' + robotId + '/users', {
-            method: 'PUT',
-            credentials: 'include', 
-            headers: {
-                "Content-type": "application/json"
-            },  
-            body: JSON.stringify(user)
-        });
+        try
+        {
+            await fetch(process.env.SERVER + '/api/roboscape/robots/' + robotId + '/users', {
+                method: 'PUT',
+                credentials: 'include', 
+                headers: {
+                    "Content-type": "application/json"
+                },  
+                body: JSON.stringify(user)
+            });
+        } catch (err) {
+            throw new Error(`Update user error: ${err}`);
+        }
     }
 }
 
